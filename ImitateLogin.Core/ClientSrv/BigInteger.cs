@@ -132,7 +132,7 @@
 
 using System;
 
-namespace ImitateLogin
+namespace ImitateLogin.Core
 {
     public class BigInteger
     {

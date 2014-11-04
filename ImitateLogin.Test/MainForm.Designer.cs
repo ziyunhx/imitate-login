@@ -1,4 +1,4 @@
-﻿namespace ImitateLogin
+﻿namespace ImitateLogin.Test
 {
     partial class MainForm
     {
