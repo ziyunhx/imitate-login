@@ -10,7 +10,7 @@ namespace ImitateLogin.Core
     public static class WeiboLogin
     {
         private static string servertime, nonce, rsakv, weibo_rsa_n, prelt;
-        private static CookieContainer _cookies = new CookieContainer();
+        private static CookieContainer _cookies;
 
         /// <summary>
         /// weibo登录获取Cookies
@@ -20,25 +20,40 @@ namespace ImitateLogin.Core
         /// <returns>Cookies</returns>
         public static string DoLogin(string UserName, string Password)
         {
+            _cookies = new CookieContainer();
             string cookies = null;
-            if (GetPreloginStatus(UserName))
+            try
             {
-                string login_url = "https://login.sina.com.cn/sso/login.php?client=ssologin.js(v1.4.15)&_=" + TimeHelper.ConvertDateTimeInt(DateTime.Now).ToString();
-                string login_data = "entry=account&gateway=1&from=&savestate=30&useticket=0&pagerefer=&vsnf=1&su=" + get_user(UserName)
-                    + "&service=sso&servertime=" + servertime + "&nonce=" + nonce + "&pwencode=rsa2&rsakv=" + rsakv + "&sp=" + get_pwa_rsa(Password)
-                    + "&sr=1440*900&encoding=UTF-8&cdult=3&domain=sina.com.cn&prelt=" + prelt + "&returntype=TEXT";
-
-                string Content = HttpHelper.GetHttpContent(login_url, login_data, _cookies);
-
-                Match m2 = Regex.Match(Content, @"crossDomainUrlList"":\[""(?<refreshUrl>.*?)""");
-                if (m2.Success)
+                if (GetPreloginStatus(UserName))
                 {
-                    string refreshLogin = HttpHelper.GetHttpContent(m2.Groups["refreshUrl"].Value.Replace("\\",""), cookies: _cookies, referer: login_url);
-                }
+                    string login_url = "https://login.sina.com.cn/sso/login.php?client=ssologin.js(v1.4.15)&_=" + TimeHelper.ConvertDateTimeInt(DateTime.Now).ToString();
+                    string login_data = "entry=account&gateway=1&from=&savestate=30&useticket=0&pagerefer=&vsnf=1&su=" + get_user(UserName)
+                        + "&service=sso&servertime=" + servertime + "&nonce=" + nonce + "&pwencode=rsa2&rsakv=" + rsakv + "&sp=" + get_pwa_rsa(Password)
+                        + "&sr=1440*900&encoding=UTF-8&cdult=3&domain=sina.com.cn&prelt=" + prelt + "&returntype=TEXT";
 
-                string home_url = "http://weibo.com/tnidea/";
-                string result = HttpHelper.GetHttpContent(home_url, cookies: _cookies);
-                cookies = _cookies.GetCookieHeader(new Uri("http://weibo.com"));
+                    string Content = HttpHelper.GetHttpContent(login_url, login_data, _cookies);
+
+                    Match m2 = Regex.Match(Content, @"crossDomainUrlList"":\[""(?<refreshUrl>.*?)""");
+                    if (m2.Success)
+                    {
+                        string refreshLogin = HttpHelper.GetHttpContent(m2.Groups["refreshUrl"].Value.Replace("\\", ""), cookies: _cookies, referer: login_url);
+                    }
+
+                    string home_url = "http://weibo.com/tnidea/";
+                    string result = HttpHelper.GetHttpContent(home_url, cookies: _cookies);
+                    cookies = _cookies.GetCookieHeader(new Uri("http://weibo.com"));
+
+                    if (string.IsNullOrWhiteSpace(result) || result.Contains("账号存在异常") || !result.Contains("$CONFIG['islogin']='1'"))
+                    {
+                        return "Fail, Msg: Login fail! Maybe you account is disable or captcha is needed.";
+                    }
+                }
+                else
+                    return "Error, Msg: The method is out of date, please update!";
+            }
+            catch (Exception e)
+            {
+                return "Error, Msg: " + e.ToString();
             }
             return cookies;
         }
@@ -70,7 +85,7 @@ namespace ImitateLogin.Core
                 }
                 return false;
             }
-            catch (Exception ex)
+            catch // (Exception ex)
             {
                 return false;
             }

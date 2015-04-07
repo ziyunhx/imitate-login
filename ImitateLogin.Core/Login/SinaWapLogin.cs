@@ -8,7 +8,7 @@ namespace ImitateLogin.Core
 {
     public class SinaWapLogin
     {
-        private static CookieContainer _cookies = new CookieContainer();
+        private static CookieContainer _cookies;
         private static string regexStr = @"form action=""(?<randUrl>[^""]+)""[\s\S]*?type=""password"" "
                 + @"name=""(?<pwName>[^""]*?)""[\s\S]*?name=""backURL"" value=""(?<backURL>[^""]*?)""[\s\S]*?"
                 + @"name=""backTitle"" value=""(?<backTitle>[^""]*?)""[\s\S]*?name=""vk"" value=""(?<vkValue>[^""]*?)""";
@@ -18,6 +18,7 @@ namespace ImitateLogin.Core
 
         public static string DoLogin(string UserName, string Password)
         {
+            _cookies = new CookieContainer();
             string cookies = "";
             
             try
@@ -53,6 +54,7 @@ namespace ImitateLogin.Core
             }
             catch (Exception e)
             {
+                return "Error, Msg: " + e.ToString();
             }
 
             return cookies;
