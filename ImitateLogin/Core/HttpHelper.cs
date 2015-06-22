@@ -10,7 +10,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace ImitateLogin.Core
+namespace ImitateLogin
 {
     public class HttpHelper
     {
@@ -123,6 +123,7 @@ namespace ImitateLogin.Core
                 }
                 catch (Exception ex)
                 {
+					return ex.ToString();
                 }
                 finally
                 {
@@ -240,7 +241,7 @@ namespace ImitateLogin.Core
                     stream.Write(data, 0, data.Length);
                 }
             }
-            string[] values = request.Headers.GetValues("Content-Type");
+            //string[] values = request.Headers.GetValues("Content-Type");
             return request.GetResponse() as HttpWebResponse;
         }
 

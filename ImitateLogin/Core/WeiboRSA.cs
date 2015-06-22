@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ImitateLogin.Core
+namespace ImitateLogin
 {
     public class WeiboRSA
     {

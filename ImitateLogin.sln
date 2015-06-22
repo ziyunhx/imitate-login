@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
+# Visual Studio 2012
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImitateLogin.Test", "ImitateLogin.Test\ImitateLogin.Test.csproj", "{D09E521D-064D-46ED-9706-21567D90E43E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImitateLogin", "ImitateLogin\ImitateLogin.csproj", "{D6B4E38E-1D46-4996-8527-302A1ADDB288}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImitateLogin.Core", "ImitateLogin.Core\ImitateLogin.Core.csproj", "{D6B4E38E-1D46-4996-8527-302A1ADDB288}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoginTestTool", "LoginTestTool\LoginTestTool.csproj", "{01B88ED4-DF93-427A-941A-B1DE4749BBBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,14 +17,18 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D09E521D-064D-46ED-9706-21567D90E43E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D09E521D-064D-46ED-9706-21567D90E43E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D09E521D-064D-46ED-9706-21567D90E43E}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{D09E521D-064D-46ED-9706-21567D90E43E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{D09E521D-064D-46ED-9706-21567D90E43E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D09E521D-064D-46ED-9706-21567D90E43E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D09E521D-064D-46ED-9706-21567D90E43E}.Release|x64.ActiveCfg = Release|Any CPU
-		{D09E521D-064D-46ED-9706-21567D90E43E}.Release|x86.ActiveCfg = Release|Any CPU
+		{01B88ED4-DF93-427A-941A-B1DE4749BBBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01B88ED4-DF93-427A-941A-B1DE4749BBBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01B88ED4-DF93-427A-941A-B1DE4749BBBE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{01B88ED4-DF93-427A-941A-B1DE4749BBBE}.Debug|x64.Build.0 = Debug|Any CPU
+		{01B88ED4-DF93-427A-941A-B1DE4749BBBE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{01B88ED4-DF93-427A-941A-B1DE4749BBBE}.Debug|x86.Build.0 = Debug|Any CPU
+		{01B88ED4-DF93-427A-941A-B1DE4749BBBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01B88ED4-DF93-427A-941A-B1DE4749BBBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01B88ED4-DF93-427A-941A-B1DE4749BBBE}.Release|x64.ActiveCfg = Release|Any CPU
+		{01B88ED4-DF93-427A-941A-B1DE4749BBBE}.Release|x64.Build.0 = Release|Any CPU
+		{01B88ED4-DF93-427A-941A-B1DE4749BBBE}.Release|x86.ActiveCfg = Release|Any CPU
+		{01B88ED4-DF93-427A-941A-B1DE4749BBBE}.Release|x86.Build.0 = Release|Any CPU
 		{D6B4E38E-1D46-4996-8527-302A1ADDB288}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D6B4E38E-1D46-4996-8527-302A1ADDB288}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6B4E38E-1D46-4996-8527-302A1ADDB288}.Debug|x64.ActiveCfg = Debug|Any CPU

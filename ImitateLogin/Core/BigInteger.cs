@@ -132,7 +132,7 @@
 
 using System;
 
-namespace ImitateLogin.Core
+namespace ImitateLogin
 {
     public class BigInteger
     {
@@ -2418,7 +2418,7 @@ namespace ImitateLogin.Core
 
             BigInteger t = p_sub1 >> s;
 
-            int bits = thisVal.bitCount();
+            //int bits = thisVal.bitCount();
             BigInteger a = 2;
 
             // b = a^t mod p

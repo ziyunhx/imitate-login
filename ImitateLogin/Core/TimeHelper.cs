@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace ImitateLogin.Core
+namespace ImitateLogin
 {
     public class TimeHelper
     {
         /// <summary>
-        /// 将Unix时间戳转换为DateTime类型时间
+		/// change Unix timestamp to csharp DateTime
         /// </summary>
-        /// <param name="d">double 型数字</param>
+		/// <param name="d">double timestamp</param>
         /// <returns>DateTime</returns>
         public static DateTime ConvertIntDateTime(double d)
         {
@@ -18,9 +18,9 @@ namespace ImitateLogin.Core
         }
 
         /// <summary>
-        /// 将c# DateTime时间格式转换为Unix时间戳格式
+		/// change csharp DateTime to Unix timestamp
         /// </summary>
-        /// <param name="time">时间</param>
+		/// <param name="time">DateTime</param>
         /// <returns>13位时间戳</returns>
         public static long ConvertDateTimeInt(DateTime time)
         {
