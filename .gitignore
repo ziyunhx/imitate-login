@@ -5,6 +5,7 @@
 *.suo
 *.user
 *.sln.docstates
+*DS_Store
 
 # Build results
 [Dd]ebug/
