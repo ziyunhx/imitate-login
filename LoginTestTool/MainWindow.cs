@@ -31,7 +31,8 @@ public partial class MainWindow: Gtk.Window
 		if (string.IsNullOrEmpty (combSites.ActiveText))
 			return;
 
-		txtResult.Buffer.Text = LoginHelper.Login(txtUserName.Text,txtPassword.Text,Enums.GetEnumName<LoginSite>(combSites.ActiveText));
+		LoginHelper loginHelper = new LoginHelper ();
+		txtResult.Buffer.Text = loginHelper.Login(txtUserName.Text,txtPassword.Text,Enums.GetEnumName<LoginSite>(combSites.ActiveText));
 	}
 
 	protected void OnBtnResetClicked (object sender, EventArgs e)

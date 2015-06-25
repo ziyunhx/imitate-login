@@ -15,7 +15,17 @@ namespace ImitateLogin
 		[Description("Weibo Wap")]
 		WeiboWap = 2,
 		[Description("Sina Wap")]
-		SinaWap = 3
+		SinaWap = 3,
+		[Description("Facebook")]
+		Facebook = 4,
+		[Description("Twitter")]
+		Twitter = 5,
+		[Description("Google")]
+		Google = 6,
+		[Description("Taobao")]
+		Taobao = 7,
+		[Description("Tencent QQ")]
+		QQ = 8
 	}
 
 	public class Enums
