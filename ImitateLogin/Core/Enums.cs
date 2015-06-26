@@ -16,15 +16,15 @@ namespace ImitateLogin
 		WeiboWap = 2,
 		[Description("Sina Wap")]
 		SinaWap = 3,
-		[Description("Facebook")]
+		[Description("*Facebook")]
 		Facebook = 4,
-		[Description("Twitter")]
+		[Description("*Twitter")]
 		Twitter = 5,
-		[Description("Google")]
+		[Description("*Google")]
 		Google = 6,
-		[Description("Taobao")]
+		[Description("*Taobao")]
 		Taobao = 7,
-		[Description("Tencent QQ")]
+		[Description("*Tencent QQ")]
 		QQ = 8
 	}
 
