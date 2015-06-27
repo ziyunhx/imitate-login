@@ -26,7 +26,7 @@ How to use it?
  - You can test it through the LoginTestTool project which depend on Gtk+.
  - You can also call this lib on multri language through Apache thrift.
  - The only method at this project is  `LoginResult Login(1: string userName, 2: string password, 3: LoginSite loginSite);`  on LoginHelper.cs.
-- You will get the result contain result type, descript message, cookies dictionary.
+ - You will get the result contain result type, descript message, cookies dictionary.
 
 License
 -------
