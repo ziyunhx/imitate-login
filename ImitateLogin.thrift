@@ -1,5 +1,3 @@
-#!/usr/local/bin/thrift --gen java:beans,nocamel,hashcode
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
@@ -27,25 +25,41 @@ namespace csharp ImitateLogin
 namespace java com.tnidea.ImitateLogin
 namespace py com.tnidea.ImitateLogin
 
+enum ResultType {
+  Success = 200,
+  Failed = 400,
+  NeedCaptcha = 401,
+  UserNameWrong = 402,
+  PasswordWrong = 403,
+  IpLimit = 404,
+  AccounntLimit = 405,
+  Timeout = 408,
+  ServiceError = 500
+}
+
 enum LoginSite {
   //Weibo
   Weibo = 1,
   //Weibo Wap
   WeiboWap = 2,
-  //Sina Wap
-  SinaWap = 3,
-  //Facebook
-  Facebook = 4,
-  //Twitter
-  Twitter = 5,
-  //Google
-  Google = 6,
   //Taobao
-  Taobao = 7,
+  Taobao = 3,
   //Tencent QQ
-  QQ = 8
+  QQ = 4,
+  //Facebook
+  Facebook = 21,
+  //Twitter
+  Twitter = 22,
+  //Google
+  Google = 23
+}
+
+struct LoginResult {
+  1: required ResultType Result;
+  2: optional string Msg = "";
+  3: optional map<string,string> Cookies;
 }
 
 service Login {
-  string Login(1: string userName, 2: string password, 3: LoginSite loginSite);
+  LoginResult Login(1: string userName, 2: string password, 3: LoginSite loginSite);
 }

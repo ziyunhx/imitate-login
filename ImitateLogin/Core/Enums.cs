@@ -14,18 +14,32 @@ namespace ImitateLogin
 		Weibo = 1,
 		[Description("Weibo Wap")]
 		WeiboWap = 2,
-		[Description("Sina Wap")]
-		SinaWap = 3,
-		[Description("*Facebook")]
-		Facebook = 4,
-		[Description("*Twitter")]
-		Twitter = 5,
-		[Description("*Google")]
-		Google = 6,
 		[Description("*Taobao")]
-		Taobao = 7,
+		Taobao = 3,
 		[Description("*Tencent QQ")]
-		QQ = 8
+		QQ = 4,
+		[Description("*Facebook")]
+		Facebook = 21,
+		[Description("*Twitter")]
+		Twitter = 22,
+		[Description("*Google")]
+		Google = 23,
+	}
+
+	/// <summary>
+	/// Login Result type.
+	/// </summary>
+	public enum ResultType
+	{
+		Success = 200,
+		Failed = 400,
+		NeedCaptcha = 401,
+		UserNameWrong = 402,
+		PasswordWrong = 403,
+		IpLimit = 404,
+		AccounntLimit = 405,
+		Timeout = 408,
+		ServiceError = 500,
 	}
 
 	public class Enums

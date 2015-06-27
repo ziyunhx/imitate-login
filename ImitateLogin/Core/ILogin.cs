@@ -6,7 +6,7 @@ namespace ImitateLogin
 	public interface ILogin
 	{
 		CookieContainer cookies {set; get;}
-		string DoLogin(string UserName, string Password);
+		LoginResult DoLogin(string UserName, string Password);
 	}
 }
 

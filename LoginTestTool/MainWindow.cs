@@ -2,6 +2,7 @@
 using ImitateLogin;
 using Gtk;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 public partial class MainWindow: Gtk.Window
 {
@@ -32,7 +33,7 @@ public partial class MainWindow: Gtk.Window
 			return;
 
 		LoginHelper loginHelper = new LoginHelper ();
-		txtResult.Buffer.Text = loginHelper.Login(txtUserName.Text,txtPassword.Text,Enums.GetEnumName<LoginSite>(combSites.ActiveText));
+		txtResult.Buffer.Text = JsonConvert.SerializeObject (loginHelper.Login (txtUserName.Text, txtPassword.Text, Enums.GetEnumName<LoginSite> (combSites.ActiveText)).Cookies);
 	}
 
 	protected void OnBtnResetClicked (object sender, EventArgs e)

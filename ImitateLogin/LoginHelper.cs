@@ -19,10 +19,10 @@ namespace ImitateLogin
 		/// <param name="password">Password.</param>
 		/// <param name="loginSite">Login site.</param>
 		/// <returns>cookies string</returns>
-		public string Login(string userName, string password, LoginSite loginSite)
+		public LoginResult Login(string userName, string password, LoginSite loginSite)
 		{
-			if(string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
-				return "error, username or password can't be null.";
+			if (string.IsNullOrEmpty (userName) || string.IsNullOrEmpty (password))
+				return new LoginResult (){Result = ResultType.Failed, Msg = "error, username or password can't be null."};
 
 			ILogin LoginClass = null;
 
@@ -33,22 +33,18 @@ namespace ImitateLogin
 			case LoginSite.WeiboWap:
 				LoginClass = new WeiboWapLogin ();
 				break;
-			case LoginSite.SinaWap:
-				LoginClass = new SinaWapLogin ();
-				break;
 			}
 
 			if(LoginClass == null)
-				return "error, can't find the login class.";
+				return new LoginResult (){Result = ResultType.Failed, Msg = "error, can't find the login class."};
 
 			return LoginClass.DoLogin (userName, password);
 		}
 	}
 
 	public class Login {
-		
 		public interface Iface {
-			string Login(string userName, string password, LoginSite loginSite);
+			LoginResult Login(string userName, string password, LoginSite loginSite);
 		}
 
 		public class Client : Iface {
@@ -76,7 +72,7 @@ namespace ImitateLogin
 			}
 
 
-			public string Login(string userName, string password, LoginSite loginSite)
+			public LoginResult Login(string userName, string password, LoginSite loginSite)
 			{
 				send_Login(userName, password, loginSite);
 				return recv_Login();
@@ -94,7 +90,7 @@ namespace ImitateLogin
 				oprot_.Transport.Flush();
 			}
 
-			public string recv_Login()
+			public LoginResult recv_Login()
 			{
 				TMessage msg = iprot_.ReadMessageBegin();
 				if (msg.Type == TMessageType.Exception) {
@@ -315,9 +311,9 @@ namespace ImitateLogin
 		[Serializable]
 		public partial class Login_result : TBase
 		{
-			private string _success;
+			private LoginResult _success;
 
-			public string Success
+			public LoginResult Success
 			{
 				get
 				{
@@ -353,8 +349,9 @@ namespace ImitateLogin
 					switch (field.ID)
 					{
 					case 0:
-						if (field.Type == TType.String) {
-							Success = iprot.ReadString();
+						if (field.Type == TType.Struct) {
+							Success = new LoginResult();
+							Success.Read(iprot);
 						} else { 
 							TProtocolUtil.Skip(iprot, field.Type);
 						}
@@ -376,10 +373,10 @@ namespace ImitateLogin
 				if (this.__isset.success) {
 					if (Success != null) {
 						field.Name = "Success";
-						field.Type = TType.String;
+						field.Type = TType.Struct;
 						field.ID = 0;
 						oprot.WriteFieldBegin(field);
-						oprot.WriteString(Success);
+						Success.Write(oprot);
 						oprot.WriteFieldEnd();
 					}
 				}
@@ -390,7 +387,7 @@ namespace ImitateLogin
 			public override string ToString() {
 				StringBuilder sb = new StringBuilder("Login_result(");
 				sb.Append("Success: ");
-				sb.Append(Success);
+				sb.Append(Success== null ? "<null>" : Success.ToString());
 				sb.Append(")");
 				return sb.ToString();
 			}

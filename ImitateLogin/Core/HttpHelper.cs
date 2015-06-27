@@ -9,6 +9,7 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Collections;
 
 namespace ImitateLogin
 {
@@ -340,5 +341,33 @@ namespace ImitateLogin
                 return null;
             }
         }
+
+		/// <summary>
+		/// 遍历CookieContainer
+		/// </summary>
+		/// <param name="cookieContainer"></param>
+		/// <returns>List of cookie</returns>
+		public static Dictionary<string, string> GetAllCookies(CookieContainer cookieContainer)
+		{
+			Dictionary<string, string> cookies = new Dictionary<string, string>();
+
+			Hashtable table = (Hashtable)cookieContainer.GetType().InvokeMember("m_domainTable",
+				System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.GetField |
+				System.Reflection.BindingFlags.Instance, null, cookieContainer, new object[] { });
+
+			foreach (string pathList in table.Keys)
+			{
+				StringBuilder _cookie = new StringBuilder ();
+				SortedList cookieColList = (SortedList)table[pathList].GetType().InvokeMember("m_list",
+					System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.GetField
+					| System.Reflection.BindingFlags.Instance, null, table[pathList], new object[] { });
+				foreach (CookieCollection colCookies in cookieColList.Values)
+					foreach (Cookie c in colCookies)
+						_cookie.Append (c.Name + "=" + c.Value + ";");
+
+				cookies.Add (pathList, _cookie.ToString ().TrimEnd (';'));
+			}
+			return cookies;
+		}
     }
 }
