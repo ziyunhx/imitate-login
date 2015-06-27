@@ -33,8 +33,6 @@ License
 
 The Apache License 2.0 applies to all samples in this repository.
 
-   Copyright 2011 Xamarin Inc
-
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
