@@ -22,9 +22,11 @@ This project is used fo imitate login the social network. Such as weibo, qq, fac
 How to use it?
 -------
 
-This project is code by csharp, you can use .Net Framework or Mono to run it. You can test it through the LoginTestTool project which depend on Gtk+. You can also call this lib on multri language through Apache thrift.
-
-The only method at this project is `LoginResult Login(1: string userName, 2: string password, 3: LoginSite loginSite);` on LoginHelper.cs. You will get the result contain result type, descript message, cookies dictionary.
+ - This project is code by csharp, you can use .Net Framework or Mono to run it.
+ - You can test it through the LoginTestTool project which depend on Gtk+.
+ - You can also call this lib on multri language through Apache thrift.
+ - The only method at this project is  `LoginResult Login(1: string userName, 2: string password, 3: LoginSite loginSite);`  on LoginHelper.cs.
+- You will get the result contain result type, descript message, cookies dictionary.
 
 License
 -------
