@@ -18,6 +18,8 @@ namespace ImitateLogin
 		Taobao = 3,
 		[Description("*Tencent QQ")]
 		QQ = 4,
+		[Description("*Baidu")]
+		Baidu = 5,
 		[Description("*Facebook")]
 		Facebook = 21,
 		[Description("*Twitter")]

@@ -7,13 +7,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
+using System.IO;
 using Thrift;
 using Thrift.Collections;
 using Thrift.Protocol;
 using Thrift.Transport;
-
 namespace ImitateLogin
 {
 
@@ -23,6 +22,8 @@ namespace ImitateLogin
 		private ResultType _Result;
 		private string _Msg;
 		private Dictionary<string, string> _Cookies;
+		private string _Referer;
+		private string _UserAgent;
 
 		public ResultType Result
 		{
@@ -63,6 +64,32 @@ namespace ImitateLogin
 			}
 		}
 
+		public string Referer
+		{
+			get
+			{
+				return _Referer;
+			}
+			set
+			{
+				__isset.Referer = true;
+				this._Referer = value;
+			}
+		}
+
+		public string UserAgent
+		{
+			get
+			{
+				return _UserAgent;
+			}
+			set
+			{
+				__isset.UserAgent = true;
+				this._UserAgent = value;
+			}
+		}
+
 
 		public Isset __isset;
 		[Serializable]
@@ -70,6 +97,8 @@ namespace ImitateLogin
 			public bool Result;
 			public bool Msg;
 			public bool Cookies;
+			public bool Referer;
+			public bool UserAgent;
 		}
 
 		public LoginResult() {
@@ -121,6 +150,20 @@ namespace ImitateLogin
 						TProtocolUtil.Skip(iprot, field.Type);
 					}
 					break;
+				case 4:
+					if (field.Type == TType.String) {
+						Referer = iprot.ReadString();
+					} else { 
+						TProtocolUtil.Skip(iprot, field.Type);
+					}
+					break;
+				case 5:
+					if (field.Type == TType.String) {
+						UserAgent = iprot.ReadString();
+					} else { 
+						TProtocolUtil.Skip(iprot, field.Type);
+					}
+					break;
 				default: 
 					TProtocolUtil.Skip(iprot, field.Type);
 					break;
@@ -166,6 +209,22 @@ namespace ImitateLogin
 				}
 				oprot.WriteFieldEnd();
 			}
+			if (Referer != null && __isset.Referer) {
+				field.Name = "Referer";
+				field.Type = TType.String;
+				field.ID = 4;
+				oprot.WriteFieldBegin(field);
+				oprot.WriteString(Referer);
+				oprot.WriteFieldEnd();
+			}
+			if (UserAgent != null && __isset.UserAgent) {
+				field.Name = "UserAgent";
+				field.Type = TType.String;
+				field.ID = 5;
+				oprot.WriteFieldBegin(field);
+				oprot.WriteString(UserAgent);
+				oprot.WriteFieldEnd();
+			}
 			oprot.WriteFieldStop();
 			oprot.WriteStructEnd();
 		}
@@ -178,6 +237,10 @@ namespace ImitateLogin
 			sb.Append(Msg);
 			sb.Append(",Cookies: ");
 			sb.Append(Cookies);
+			sb.Append(",Referer: ");
+			sb.Append(Referer);
+			sb.Append(",UserAgent: ");
+			sb.Append(UserAgent);
 			sb.Append(")");
 			return sb.ToString();
 		}

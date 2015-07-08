@@ -1,5 +1,6 @@
 ﻿using System;
 using Gtk;
+using System.IO;
 
 namespace LoginTestTool
 {
@@ -7,6 +8,9 @@ namespace LoginTestTool
 	{
 		public static void Main (string[] args)
 		{
+
+			String s = Path.Combine (Environment.CurrentDirectory, "../../../xulrunner");
+
 			Application.Init ();
 			MainWindow win = new MainWindow ();
 			win.Show ();

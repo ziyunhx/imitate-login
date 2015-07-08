@@ -46,6 +46,8 @@ enum LoginSite {
   Taobao = 3,
   //Tencent QQ
   QQ = 4,
+  //Baidu
+  Baidu = 5,
   //Facebook
   Facebook = 21,
   //Twitter
@@ -58,6 +60,8 @@ struct LoginResult {
   1: required ResultType Result;
   2: optional string Msg = "";
   3: optional map<string,string> Cookies;
+  4: optional string Referer;
+  5: optional string UserAgent;
 }
 
 service Login {
