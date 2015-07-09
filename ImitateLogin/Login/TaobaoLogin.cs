@@ -2,21 +2,26 @@
 
 namespace ImitateLogin
 {
-	public class TaobaoLogin : ILogin
-	{
-		#region ILogin implementation
+    public class TaobaoLogin : ILogin
+    {
+        #region ILogin implementation
 
-		public LoginResult DoLogin (string UserName, string Password)
-		{
-			throw new NotImplementedException ();
-		}
+        public LoginResult DoLogin(string UserName, string Password)
+        {
+            //login url
+            string loginUrl = "https://login.taobao.com/member/login.jhtml";
 
-		public System.Net.CookieContainer cookies {
-			get ;
-			set ;
-		}
+            //need read the ua.js
+            throw new NotImplementedException();
+        }
 
-		#endregion
-	}
+        public System.Net.CookieContainer cookies
+        {
+            get;
+            set;
+        }
+
+        #endregion
+    }
 }
 
