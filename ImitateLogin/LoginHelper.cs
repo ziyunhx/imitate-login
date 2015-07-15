@@ -33,6 +33,9 @@ namespace ImitateLogin
 			case LoginSite.WeiboWap:
 				LoginClass = new WeiboWapLogin ();
 				break;
+			case LoginSite.Baidu:
+				LoginClass = new BaiduLogin ();
+				break;
 			}
 
 			if(LoginClass == null)

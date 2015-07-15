@@ -8,9 +8,6 @@ namespace LoginTestTool
 	{
 		public static void Main (string[] args)
 		{
-
-			String s = Path.Combine (Environment.CurrentDirectory, "../../../xulrunner");
-
 			Application.Init ();
 			MainWindow win = new MainWindow ();
 			win.Show ();

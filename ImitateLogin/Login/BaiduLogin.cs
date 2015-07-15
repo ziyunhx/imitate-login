@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ImitateLogin.Login
+namespace ImitateLogin
 {
     public class BaiduLogin : ILogin
     {
@@ -20,7 +20,7 @@ namespace ImitateLogin.Login
             try
             {
                 //1. Get the token.
-                string token_url = "https://passport.baidu.com/v2/api/?getapi&tpl=mn&apiver=v3&class=login&logintype=dialogLogin";
+				string token_url = "https://passport.baidu.com/v2/api/?getapi&tpl=mn&apiver=v3&class=login&logintype=dialogLogin";
                 string prepareContent = HttpHelper.GetHttpContent(token_url, null, cookies);
 
                 dynamic json = JsonConvert.DeserializeObject(prepareContent);
