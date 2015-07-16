@@ -3,11 +3,11 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
-using System.Collections.Generic;
+using TNIdea.Common.Helper;
 
 namespace ImitateLogin
 {
-	public class WeiboWapLogin : ILogin
+    public class WeiboWapLogin : ILogin
 	{
 		public CookieContainer cookies { set; get;}
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ImitateLogin
+namespace TNIdea.Common.Helper
 {
     public class TimeHelper
     {

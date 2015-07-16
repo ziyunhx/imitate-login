@@ -11,7 +11,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections;
 
-namespace ImitateLogin
+namespace TNIdea.Common.Helper
 {
     public class HttpHelper
     {

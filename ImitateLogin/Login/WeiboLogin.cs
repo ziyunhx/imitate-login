@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
+using TNIdea.Common.Helper;
 
 namespace ImitateLogin
 {
-	public class WeiboLogin : ILogin
+    public class WeiboLogin : ILogin
 	{
 		private string servertime, nonce, rsakv, weibo_rsa_n, prelt;
 		public CookieContainer cookies { set; get;}
