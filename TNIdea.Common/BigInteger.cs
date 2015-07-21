@@ -132,7 +132,7 @@
 
 using System;
 
-namespace ImitateLogin
+namespace TNIdea.Common
 {
     public class BigInteger
     {

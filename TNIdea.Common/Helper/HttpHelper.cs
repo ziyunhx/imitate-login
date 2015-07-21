@@ -27,7 +27,7 @@ namespace TNIdea.Common.Helper
         /// <param name="referer">来源页</param>
         /// <param name="cookiesDomain">Cookies的Domian参数，配合cookies使用；为空则取url的Host</param>
         /// <returns></returns>
-        public static string GetHttpContent(string url, string postData = null, CookieContainer cookies = null, string userAgent = "", string referer = "", string cookiesDomain = "")
+        public static string GetHttpContent(string url, string postData = null, CookieContainer cookies = null, string userAgent = "", string referer = "", string cookiesDomain = "", Encoding encode = null)
         {
             try
             {
@@ -38,7 +38,6 @@ namespace TNIdea.Common.Helper
                     httpResponse = CreateGetHttpResponse(url, cookies: cookies, userAgent: userAgent, referer: referer);
 
                 #region 根据Html头判断
-                Encoding Encode = null;
                 string Content = null;
                 //缓冲区长度
                 const int N_CacheLength = 10000;
@@ -60,7 +59,6 @@ namespace TNIdea.Common.Helper
                         ResponseStream = new DeflateStream(
                             httpResponse.GetResponseStream(), CompressionMode.Decompress);
                         break;
-
                     default:
                         ResponseStream = httpResponse.GetResponseStream();
                         break;
@@ -83,48 +81,40 @@ namespace TNIdea.Common.Helper
                         cache += (char)b;
                     }
 
-                    try
-                    {
 
-                        if (httpResponse.CharacterSet == "ISO-8859-1" || httpResponse.CharacterSet == "zh-cn")
+                    if (encode == null)
+                    {
+                        try
                         {
-                            Match match = Regex.Match(
-                                              cache, CharsetReg,
-                                              RegexOptions.IgnoreCase | RegexOptions.Multiline);
-                            if (match.Success)
+                            if (httpResponse.CharacterSet == "ISO-8859-1" || httpResponse.CharacterSet == "zh-cn")
                             {
-                                try
+                                Match match = Regex.Match(cache, CharsetReg, RegexOptions.IgnoreCase | RegexOptions.Multiline);
+                                if (match.Success)
                                 {
-                                    string charset = match.Groups["Charset"].Value;
-                                    Encode = System.Text.Encoding.GetEncoding(charset);
+                                    try
+                                    {
+                                        string charset = match.Groups["Charset"].Value;
+                                        encode = Encoding.GetEncoding(charset);
+                                    }
+                                    catch { }
                                 }
-                                catch
-                                {
-                                }
+                                else
+                                    encode = Encoding.GetEncoding("GB2312");
                             }
                             else
-                            {
-                                Encode = System.Text.Encoding.GetEncoding("GB2312");
-                            }
-
+                                encode = Encoding.GetEncoding(httpResponse.CharacterSet);
                         }
-                        else
-                        {
-                            Encode = System.Text.Encoding.GetEncoding(httpResponse.CharacterSet);
-                        }
-                    }
-                    catch
-                    {
+                        catch { }
                     }
 
                     //缓冲字节重新编码，然后再把流读完
-                    var Reader = new StreamReader(ResponseStream, Encode);
-                    Content = Encode.GetString(bytes.ToArray(), 0, count) + Reader.ReadToEnd();
+                    var Reader = new StreamReader(ResponseStream, encode);
+                    Content = encode.GetString(bytes.ToArray(), 0, count) + Reader.ReadToEnd();
                     Reader.Close();
                 }
                 catch (Exception ex)
                 {
-					return ex.ToString();
+                    return ex.ToString();
                 }
                 finally
                 {
@@ -342,32 +332,32 @@ namespace TNIdea.Common.Helper
             }
         }
 
-		/// <summary>
-		/// 遍历CookieContainer
-		/// </summary>
-		/// <param name="cookieContainer"></param>
-		/// <returns>List of cookie</returns>
-		public static Dictionary<string, string> GetAllCookies(CookieContainer cookieContainer)
-		{
-			Dictionary<string, string> cookies = new Dictionary<string, string>();
+        /// <summary>
+        /// 遍历CookieContainer
+        /// </summary>
+        /// <param name="cookieContainer"></param>
+        /// <returns>List of cookie</returns>
+        public static Dictionary<string, string> GetAllCookies(CookieContainer cookieContainer)
+        {
+            Dictionary<string, string> cookies = new Dictionary<string, string>();
 
-			Hashtable table = (Hashtable)cookieContainer.GetType().InvokeMember("m_domainTable",
-				System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.GetField |
-				System.Reflection.BindingFlags.Instance, null, cookieContainer, new object[] { });
+            Hashtable table = (Hashtable)cookieContainer.GetType().InvokeMember("m_domainTable",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.GetField |
+                System.Reflection.BindingFlags.Instance, null, cookieContainer, new object[] { });
 
-			foreach (string pathList in table.Keys)
-			{
-				StringBuilder _cookie = new StringBuilder ();
-				SortedList cookieColList = (SortedList)table[pathList].GetType().InvokeMember("m_list",
-					System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.GetField
-					| System.Reflection.BindingFlags.Instance, null, table[pathList], new object[] { });
-				foreach (CookieCollection colCookies in cookieColList.Values)
-					foreach (Cookie c in colCookies)
-						_cookie.Append (c.Name + "=" + c.Value + ";");
+            foreach (string pathList in table.Keys)
+            {
+                StringBuilder _cookie = new StringBuilder();
+                SortedList cookieColList = (SortedList)table[pathList].GetType().InvokeMember("m_list",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.GetField
+                    | System.Reflection.BindingFlags.Instance, null, table[pathList], new object[] { });
+                foreach (CookieCollection colCookies in cookieColList.Values)
+                    foreach (Cookie c in colCookies)
+                        _cookie.Append(c.Name + "=" + c.Value + ";");
 
-				cookies.Add (pathList, _cookie.ToString ().TrimEnd (';'));
-			}
-			return cookies;
-		}
+                cookies.Add(pathList, _cookie.ToString().TrimEnd(';'));
+            }
+            return cookies;
+        }
     }
 }

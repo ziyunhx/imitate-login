@@ -52,8 +52,6 @@
     <Compile Include="Login\WeiboLogin.cs" />
     <Compile Include="Login\WeiboWapLogin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Core\BigInteger.cs" />
-    <Compile Include="Core\WeiboRSA.cs" />
     <Compile Include="Core\ILogin.cs" />
     <Compile Include="Core\Enums.cs" />
     <Compile Include="LoginHelper.cs" />

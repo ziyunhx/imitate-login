@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace ImitateLogin
+namespace TNIdea.Common.Helper
 {
-    public class WeiboRSA
+    public class RSAHelper
     {
         private static Random rand = new Random();
 

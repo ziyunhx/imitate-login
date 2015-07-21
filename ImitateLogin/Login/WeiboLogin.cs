@@ -111,7 +111,7 @@ namespace ImitateLogin
 		/// <returns></returns>
 		private string get_pwa_rsa(string password)
 		{
-			WeiboRSA rsa = new WeiboRSA ();
+			RSAHelper rsa = new RSAHelper ();
 			rsa.SetPublic (weibo_rsa_n, "10001");
 			string data = servertime + "\t" + nonce + "\n" + password;
 			return rsa.Encrypt (data).ToLower ();
