@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.22823.1
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImitateLogin", "ImitateLogin\ImitateLogin.csproj", "{D6B4E38E-1D46-4996-8527-302A1ADDB288}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoginTestTool", "LoginTestTool\LoginTestTool.csproj", "{01B88ED4-DF93-427A-941A-B1DE4749BBBE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoginTestTool.GTK", "LoginTestTool.GTK\LoginTestTool.GTK.csproj", "{01B88ED4-DF93-427A-941A-B1DE4749BBBE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TNIdea.Common", "TNIdea.Common\TNIdea.Common.csproj", "{1DA0FA07-ED7C-497A-8B8A-A19ED60B49E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoginTestTool.WPF", "LoginTestTool.WPF\LoginTestTool.WPF.csproj", "{02A66D24-2BC9-4A25-A399-A8A39B01CD1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,18 @@ Global
 		{1DA0FA07-ED7C-497A-8B8A-A19ED60B49E7}.Release|x64.Build.0 = Release|Any CPU
 		{1DA0FA07-ED7C-497A-8B8A-A19ED60B49E7}.Release|x86.ActiveCfg = Release|Any CPU
 		{1DA0FA07-ED7C-497A-8B8A-A19ED60B49E7}.Release|x86.Build.0 = Release|Any CPU
+		{02A66D24-2BC9-4A25-A399-A8A39B01CD1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02A66D24-2BC9-4A25-A399-A8A39B01CD1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02A66D24-2BC9-4A25-A399-A8A39B01CD1C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{02A66D24-2BC9-4A25-A399-A8A39B01CD1C}.Debug|x64.Build.0 = Debug|Any CPU
+		{02A66D24-2BC9-4A25-A399-A8A39B01CD1C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{02A66D24-2BC9-4A25-A399-A8A39B01CD1C}.Debug|x86.Build.0 = Debug|Any CPU
+		{02A66D24-2BC9-4A25-A399-A8A39B01CD1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02A66D24-2BC9-4A25-A399-A8A39B01CD1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02A66D24-2BC9-4A25-A399-A8A39B01CD1C}.Release|x64.ActiveCfg = Release|Any CPU
+		{02A66D24-2BC9-4A25-A399-A8A39B01CD1C}.Release|x64.Build.0 = Release|Any CPU
+		{02A66D24-2BC9-4A25-A399-A8A39B01CD1C}.Release|x86.ActiveCfg = Release|Any CPU
+		{02A66D24-2BC9-4A25-A399-A8A39B01CD1C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,10 +1,8 @@
-﻿using System;
-using Gtk;
-using System.IO;
+﻿using Gtk;
 
-namespace LoginTestTool
+namespace LoginTestTool.GTK
 {
-	class MainClass
+    class MainClass
 	{
 		public static void Main (string[] args)
 		{
