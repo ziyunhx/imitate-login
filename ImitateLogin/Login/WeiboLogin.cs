@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Net;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Web;
 using TNIdea.Common.Helper;
 
@@ -31,12 +31,8 @@ namespace ImitateLogin
 						+ "&sr=1440*900&encoding=UTF-8&cdult=3&domain=sina.com.cn&prelt=" + prelt + "&returntype=TEXT";
 
 					string Content = HttpHelper.GetHttpContent(login_url, login_data, cookies);
-
-					Match m2 = Regex.Match(Content, @"crossDomainUrlList"":\[""(?<refreshUrl>.*?)""");
-					if (m2.Success)
-					{
-						HttpHelper.GetHttpContent(m2.Groups["refreshUrl"].Value.Replace("\\", ""), cookies: cookies, referer: login_url);
-					}
+                    dynamic refreshJson = JsonConvert.DeserializeObject(Content.Substring(0, Content.LastIndexOf('}') + 1));
+                    HttpHelper.GetHttpContent(refreshJson.crossDomainUrlList[0].ToString(), cookies: cookies, referer: login_url);
 
 					string home_url = "http://weibo.com/tnidea/";
 					string result = HttpHelper.GetHttpContent(home_url, cookies: cookies);
@@ -70,21 +66,17 @@ namespace ImitateLogin
 			{
 				long timestart = TimeHelper.ConvertDateTimeInt(DateTime.Now);
 				string prelogin_url = "http://login.sina.com.cn/sso/prelogin.php?entry=account&callback=sinaSSOController.preloginCallBack&su=" + get_user(UserName) + "&rsakt=mod&client=ssologin.js(v1.4.15)&_=" + timestart;
-				string Content = HttpHelper.GetHttpContent(prelogin_url, cookies: cookies);
+				string Content = HttpHelper.GetHttpContent(prelogin_url, cookies: cookies, encode: Encoding.GetEncoding("GB2312"));
 				long dateTimeEndPre = TimeHelper.ConvertDateTimeInt(DateTime.Now);
 
 				prelt = Math.Max(dateTimeEndPre - timestart, 50).ToString();
-				string regex = @"""servertime"":(?<servertime>\d*).*?""nonce"":""(?<nonce>[^""]*?)"",""pubkey"":""(?<pubkey>[^""]*?)"",""rsakv"":""(?<rsakv>[^""]*?)"".*?""exectime"":(?<exectime>\d*)";
-				Match m = Regex.Match(Content, regex);
-				if (m.Success && m.Groups["servertime"].Success) //验证一个
-				{
-					servertime = m.Groups["servertime"].Value;
-					nonce = m.Groups["nonce"].Value;
-					weibo_rsa_n = m.Groups["pubkey"].Value;
-					rsakv = m.Groups["rsakv"].Value;
-					return true;
-				}
-				return false;
+                dynamic prepareJson = JsonConvert.DeserializeObject(Content.Split('(')[1].Split(')')[0]);
+
+				servertime = prepareJson.servertime;
+				nonce = prepareJson.nonce;
+				weibo_rsa_n = prepareJson.pubkey;
+				rsakv = prepareJson.rsakv;
+				return true;
 			}
 			catch // (Exception ex)
 			{
