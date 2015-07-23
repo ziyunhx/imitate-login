@@ -1,17 +1,7 @@
-﻿using System;
+﻿using ImitateLogin;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace LoginTestTool.WPF
 {
@@ -23,6 +13,38 @@ namespace LoginTestTool.WPF
         public MainWindow()
         {
             InitializeComponent();
+            InitCombox();
+        }
+
+        private void btnLogin_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtUserName.Text) || string.IsNullOrEmpty(txtPassword.Password))
+                return;
+
+            if (cmbLoginSite.SelectedIndex < 0)
+                return;
+
+            LoginHelper loginHelper = new LoginHelper();
+            txtStatus.Text = JsonConvert.SerializeObject(loginHelper.Login(txtUserName.Text, txtPassword.Password, Enums.GetEnumName<LoginSite>(cmbLoginSite.SelectedValue.ToString())).Cookies);
+        }
+
+        private void btnReset_Click(object sender, RoutedEventArgs e)
+        {
+            txtUserName.Text = "";
+            txtPassword.Clear();
+            txtStatus.Text = "";
+        }
+
+        private void InitCombox()
+        {
+            List<string> sites = Enums.GetDescriptions<LoginSite>();
+
+            if (sites != null)
+            {
+                foreach (var site in sites)
+                    cmbLoginSite.Items.Add(site);
+                cmbLoginSite.SelectedIndex = 0;
+            }
         }
     }
 }

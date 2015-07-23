@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -39,7 +40,7 @@ namespace ImitateLogin
                 string KEY = pubkeyJson.key;
 
                 //3. Build post data
-                string login_data = "staticpage=https%3A%2F%2Fwww.baidu.com%2Fcache%2Fuser%2Fhtml%2Fv3Jump.html&charset=UTF-8&token={0}&tpl=mn&subpro=&apiver=v3&tt={1}&codestring=&safeflg=0&u=https%3A%2F%2Fwww.baidu.com%2F&isPhone=false&detect=1&quick_user=0&logintype=dialogLogin&logLoginType=pc_loginDialog&idc=&loginmerge=true&splogin=rate&username={2}password={3}&verifycode=&mem_pass=on&rsakey={4}&crypttype=12&ppui_logintime=14941&gid={5}";
+                string login_data = "staticpage=https%3A%2F%2Fwww.baidu.com%2Fcache%2Fuser%2Fhtml%2Fv3Jump.html&charset=UTF-8&token={0}&tpl=mn&subpro=&apiver=v3&tt={1}&codestring=&safeflg=0&u=https%3A%2F%2Fwww.baidu.com%2F&isPhone=false&detect=1&quick_user=0&logintype=dialogLogin&logLoginType=pc_loginDialog&idc=&loginmerge=true&splogin=rate&username={2}&password={3}&verifycode=&mem_pass=on&rsakey={4}&crypttype=12&ppui_logintime=14941&gid={5}";
                 login_data = string.Format(login_data, token, TimeHelper.ConvertDateTimeInt(DateTime.Now), HttpUtility.UrlEncode(UserName, Encoding.UTF8), get_pwa_rsa(Password), KEY, Guid.NewGuid().ToString());
 
                 //4. Post the login data
@@ -80,10 +81,10 @@ namespace ImitateLogin
 		/// <returns></returns>
 		private string get_pwa_rsa(string password)
         {
-            RSAHelper rsa = new RSAHelper();
-            rsa.SetPublic(rsa_pub_baidu, "10001");
-            string data = password;
-            return rsa.Encrypt(data).ToLower();
+            RSACryptoServiceProvider provider = OpenSSHHelper.DecodePEMKey(rsa_pub_baidu.Substring(0, rsa_pub_baidu.LastIndexOf('-') + 1));
+
+            byte[] bytes = new UnicodeEncoding().GetBytes(password);
+            return Convert.ToBase64String(provider.Encrypt(bytes, false));
         }
     }
 }

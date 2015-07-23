@@ -5,8 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LoginTestTool.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Imitate Login Tool" Height="338.835" Width="342.962">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label x:Name="labLoginSite" Content="LoginSite:" HorizontalAlignment="Left" Margin="28,15,0,0" VerticalAlignment="Top" Height="26" Width="62"/>
+        <Label x:Name="labUserName" Content="UserName:" HorizontalAlignment="Left" Margin="22,52,0,0" VerticalAlignment="Top" Height="26" Width="68"/>
+        <Label x:Name="labPassword" Content="Password:" HorizontalAlignment="Left" Margin="28,88,0,0" VerticalAlignment="Top" Height="26" Width="62"/>
+        <ComboBox x:Name="cmbLoginSite" Margin="104,15,31,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="22"/>
+        <TextBox x:Name="txtUserName" Grid.ColumnSpan="2" Height="23" Margin="104,51,31,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <PasswordBox x:Name="txtPassword" Margin="104,87,31,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="23" RenderTransformOrigin="0.492,-0.228"/>
+        <Button x:Name="btnLogin" Grid.ColumnSpan="2" Content="Login" HorizontalAlignment="Left" Margin="104,130,0,0" VerticalAlignment="Top" Width="75" Click="btnLogin_Click"/>
+        <Button x:Name="btnReset" Content="Reset" HorizontalAlignment="Left" Margin="36,130,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="btnReset_Click"/>
+        <Border x:Name="txtBorder" BorderBrush="#FF8C8989" BorderThickness="1" Margin="10,164,10,9.5" Grid.ColumnSpan="2"/>
+        <TextBlock x:Name="txtStatus" Margin="11,164,11,11" TextWrapping="Wrap" Grid.ColumnSpan="2"/>
+
     </Grid>
 </Window>
