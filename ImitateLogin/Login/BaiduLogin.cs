@@ -7,8 +7,34 @@ using System.Text.RegularExpressions;
 using System.Web;
 using TNIdea.Common.Helper;
 
+/* 错误代码
+"-1":       "系统错误,请您稍后再试",
+"1":        "您输入的帐号格式不正确",
+"2":        "您输入的帐号不存在",
+"3":        "验证码不存在或已过期,请重新输入",
+"4":        "您输入的帐号或密码有误",
+"5":        "请在弹出的窗口操作,或重新登录",
+"6":        "您输入的验证码有误",
+"16":       "您的帐号因安全问题已被限制登录",
+"257":      "请输入验证码",
+"100027":   "百度正在进行系统升级，暂时不能提供服务，敬请谅解",
+"400031":   "请在弹出的窗口操作,或重新登录",
+"401007":   "您的手机号关联了其他帐号，请选择登录",
+"120021":   "登录失败,请在弹出的窗口操作,或重新登录",
+"500010":   "登录过于频繁,请24小时后再试",
+"200010":   "验证码不存在或已过期",
+"100005":   "系统错误,请您稍后再试",
+"120019":   "请在弹出的窗口操作,或重新登录",
+"110024":   "此帐号暂未激活",
+"100023":   "开启Cookie之后才能登录",
+"17":       "您的帐号已锁定,请解锁后登录"
+*/
+
 namespace ImitateLogin
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class BaiduLogin : ILogin
     {
         private string rsa_pub_baidu = "";
@@ -21,6 +47,8 @@ namespace ImitateLogin
 
             try
             {
+
+
                 //1. Get the token.
                 string passApiUrl = "https://passport.baidu.com/passApi/html/_blank.html";
                 HttpHelper.GetHttpContent(passApiUrl, null, cookies);
@@ -30,6 +58,11 @@ namespace ImitateLogin
                 //string prepareJson = prepareContent.Split('(')[1].Split(')')[0];
                 dynamic prepareJson = JsonConvert.DeserializeObject(prepareContent.Substring(0, prepareContent.LastIndexOf('}') + 1));
                 string token = prepareJson.data.token;
+                //check login
+                string check_url = "https://passport.baidu.com/v2/api/?logincheck&token={0}&tpl=mn&apiver=v3&tt={1}&username={2}&isphone=false";
+                string checkContent = HttpHelper.GetHttpContent(string.Format(check_url, token, TimeHelper.ConvertDateTimeInt(DateTime.Now), HttpUtility.UrlEncode(UserName, Encoding.UTF8)), null, cookies, referer: "https://www.baidu.com/");
+                //codeString will at checkContent
+                //https://passport.baidu.com/cgi-bin/genimage?codestring&v=timestamp
 
                 //2. Get public key
                 string pubkey_url = "https://passport.baidu.com/v2/getpublickey?token={0}&tpl=mn&apiver=v3";
@@ -41,7 +74,7 @@ namespace ImitateLogin
 
                 //3. Build post data
                 string login_data = "staticpage=https%3A%2F%2Fwww.baidu.com%2Fcache%2Fuser%2Fhtml%2Fv3Jump.html&charset=UTF-8&token={0}&tpl=mn&subpro=&apiver=v3&tt={1}&codestring=&safeflg=0&u=https%3A%2F%2Fwww.baidu.com%2F&isPhone=false&detect=1&quick_user=0&logintype=dialogLogin&logLoginType=pc_loginDialog&idc=&loginmerge=true&splogin=rate&username={2}&password={3}&verifycode=&mem_pass=on&rsakey={4}&crypttype=12&ppui_logintime=14941&gid={5}";
-                login_data = string.Format(login_data, token, TimeHelper.ConvertDateTimeInt(DateTime.Now), HttpUtility.UrlEncode(UserName, Encoding.UTF8), get_pwa_rsa(Password), KEY, Guid.NewGuid().ToString());
+                login_data = string.Format(login_data, token, TimeHelper.ConvertDateTimeInt(DateTime.Now), HttpUtility.UrlEncode(UserName, Encoding.UTF8), HttpUtility.UrlEncode(get_pwa_rsa(Password), Encoding.UTF8), KEY, Guid.NewGuid().ToString());
 
                 //4. Post the login data
                 string login_url = "https://passport.baidu.com/v2/api/?login";
