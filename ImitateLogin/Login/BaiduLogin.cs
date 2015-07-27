@@ -47,8 +47,6 @@ namespace ImitateLogin
 
             try
             {
-
-
                 //1. Get the token.
                 string passApiUrl = "https://passport.baidu.com/passApi/html/_blank.html";
                 HttpHelper.GetHttpContent(passApiUrl, null, cookies);
@@ -73,8 +71,9 @@ namespace ImitateLogin
                 string KEY = pubkeyJson.key;
 
                 //3. Build post data
-                string login_data = "staticpage=https%3A%2F%2Fwww.baidu.com%2Fcache%2Fuser%2Fhtml%2Fv3Jump.html&charset=UTF-8&token={0}&tpl=mn&subpro=&apiver=v3&tt={1}&codestring=&safeflg=0&u=https%3A%2F%2Fwww.baidu.com%2F&isPhone=false&detect=1&quick_user=0&logintype=dialogLogin&logLoginType=pc_loginDialog&idc=&loginmerge=true&splogin=rate&username={2}&password={3}&verifycode=&mem_pass=on&rsakey={4}&crypttype=12&ppui_logintime=14941&gid={5}";
-                login_data = string.Format(login_data, token, TimeHelper.ConvertDateTimeInt(DateTime.Now), HttpUtility.UrlEncode(UserName, Encoding.UTF8), HttpUtility.UrlEncode(get_pwa_rsa(Password), Encoding.UTF8), KEY, Guid.NewGuid().ToString());
+                string login_data = "staticpage=https%3A%2F%2Fwww.baidu.com%2Fcache%2Fuser%2Fhtml%2Fv3Jump.html&charset=UTF-8&token={0}&tpl=mn&subpro=&apiver=v3&tt={1}&codestring=&safeflg=0&u=https%3A%2F%2Fwww.baidu.com%2F&isPhone=false&detect=1&quick_user=0&logintype=dialogLogin&logLoginType=pc_loginDialog&idc=&loginmerge=true&splogin=rate&username={2}&password={3}&verifycode=&mem_pass=on&rsakey={4}&crypttype=12&ppui_logintime=13540&gid={5}";
+
+                login_data = string.Format(login_data, token, TimeHelper.ConvertDateTimeInt(DateTime.Now), HttpUtility.UrlEncode(UserName, Encoding.UTF8), Escape(get_pwa_rsa(Password)), KEY, Guid.NewGuid().ToString());
 
                 //4. Post the login data
                 string login_url = "https://passport.baidu.com/v2/api/?login";
@@ -114,10 +113,33 @@ namespace ImitateLogin
 		/// <returns></returns>
 		private string get_pwa_rsa(string password)
         {
-            RSACryptoServiceProvider provider = OpenSSHHelper.DecodePEMKey(rsa_pub_baidu.Substring(0, rsa_pub_baidu.LastIndexOf('-') + 1));
+            RSAHelper rsaHelper = new RSAHelper();
+            rsaHelper.SetPublic(rsa_pub_baidu.Substring(0, rsa_pub_baidu.LastIndexOf('-') + 1));
 
-            byte[] bytes = new UnicodeEncoding().GetBytes(password);
-            return Convert.ToBase64String(provider.Encrypt(bytes, false));
+            return rsaHelper.Encrypt(password);
         }
+
+        /// <summary>
+        /// #%&+=\/\\\ \　\f\r\n\t
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string Escape(string str)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (char c in str)
+            {
+                if (c == '#' || c == '%' || c == '&' || c == '+' || c == '=' || c == '　'
+                || c == '/' || c == '\\' || c == ' ' || c == '\f' || c == '\r' || c == '\n' || c == '\t')
+                {
+                    string temp = Convert.ToString(256 + (int)c, 16);
+                    sb.Append("%" + temp.Substring(1).ToUpper());
+                }
+                else
+                    sb.Append(c.ToString());
+            }
+            return sb.ToString();
+        }
+
     }
 }
