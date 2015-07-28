@@ -65,7 +65,7 @@ namespace ImitateLogin
                 //2. Get public key
                 string pubkey_url = "https://passport.baidu.com/v2/getpublickey?token={0}&tpl=mn&apiver=v3";
                 string pubkeyContent = HttpHelper.GetHttpContent(string.Format(pubkey_url, token), null, cookies, referer: "https://www.baidu.com/", encode: Encoding.GetEncoding("GB2312"));
-                //string prepareJson = prepareContent.Split('(')[1].Split(')')[0];
+
                 dynamic pubkeyJson = JsonConvert.DeserializeObject(pubkeyContent.Substring(0, pubkeyContent.LastIndexOf('}') + 1));
                 rsa_pub_baidu = pubkeyJson.pubkey;
                 string KEY = pubkeyJson.key;
@@ -80,11 +80,6 @@ namespace ImitateLogin
 
                 string Content = HttpHelper.GetHttpContent(login_url, login_data, cookies, referer: "https://www.baidu.com/");
 
-                Match m2 = Regex.Match(Content, @"crossDomainUrlList"":\[""(?<refreshUrl>.*?)""");
-                if (m2.Success)
-                {
-                    HttpHelper.GetHttpContent(m2.Groups["refreshUrl"].Value.Replace("\\", ""), cookies: cookies, referer: login_url);
-                }
 
                 string home_url = "https://www.baidu.com";
                 string result = HttpHelper.GetHttpContent(home_url, cookies: cookies);

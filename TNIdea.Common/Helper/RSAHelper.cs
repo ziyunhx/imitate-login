@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace TNIdea.Common.Helper
 {
@@ -142,11 +143,14 @@ namespace TNIdea.Common.Helper
 
                 Modulus = new BigInteger(modulus);
 
+                //BigInteger {0: 209999335, 1: 94837678, 2: 175986845, 3: 230135138, 4: 268304553, 5: 195320486, 6: 56589681, 7: 171621713, 8: 120215536, 9: 110044962, 10: 186213019, 11: 172508023, 12: 151535381, 13: 113516115, 14: 151621612, 15: 10796550, 16: 231157203, 17: 65670079, 18: 251299262, 19: 159535808, 20: 61312987, 21: 158963780, 22: 251665809, 23: 230017830, 24: 141990593, 25: 181559067, 26: 155478777, 27: 149700697, 28: 115985251, 29: 194627468, 30: 162285189, 31: 239411989, 32: 37571148, 33: 21890124, 34: 111156872, 35: 77748488, 36: 50903, t: 37, s: 0}
+
                 if (binr.ReadByte() != 0x02)			//expect an Integer for the exponent data
                     return;
                 int expbytes = (int)binr.ReadByte();		// should only need one byte for actual exponent data (for all useful values)
                 byte[] exponent = binr.ReadBytes(expbytes);
 
+                //65537
                 Exponent = new BigInteger(exponent);
             }
             catch (Exception)
@@ -180,20 +184,21 @@ namespace TNIdea.Common.Helper
         {
             string pemstr = instr.Trim();
             byte[] binkey;
-            if (!pemstr.StartsWith(pempubheader) || !pemstr.EndsWith(pempubfooter))
-                return null;
-            StringBuilder sb = new StringBuilder(pemstr);
-            sb.Replace(pempubheader, "");  //remove headers/footers, if present
-            sb.Replace(pempubfooter, "");
 
-            string pubstr = sb.ToString().Trim();	//get string after removing leading/trailing whitespace
+            string baiduRSARegex = @"-----BEGIN [^-]+-----([A-Za-z0-9+\/=\s]+)-----END [^-]+-----|begin-base64[^\n]+\n([A-Za-z0-9+\/=\s]+)====";
+
+            string pubstr = "";
+            Match m = Regex.Match(instr, baiduRSARegex);
+            if (m.Success)
+                pubstr = m.Groups[1].Value;
 
             try
             {
                 binkey = Convert.FromBase64String(pubstr);
             }
             catch (System.FormatException)
-            {		//if can't b64 decode, data is not valid
+            {
+                //if can't b64 decode, data is not valid
                 return null;
             }
             return binkey;
