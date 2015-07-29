@@ -27,7 +27,7 @@ namespace TNIdea.Common.Helper
         /// <param name="referer">来源页</param>
         /// <param name="cookiesDomain">Cookies的Domian参数，配合cookies使用；为空则取url的Host</param>
         /// <returns></returns>
-        public static string GetHttpContent(string url, string postData = null, CookieContainer cookies = null, string userAgent = "", string referer = "", string cookiesDomain = "", Encoding encode = null)
+        public static string GetHttpContent(string url, string postData = null, CookieContainer cookies = null, string userAgent = "", string referer = "", string cookiesDomain = "")
         {
             try
             {
@@ -38,6 +38,7 @@ namespace TNIdea.Common.Helper
                     httpResponse = CreateGetHttpResponse(url, cookies: cookies, userAgent: userAgent, referer: referer);
 
                 #region 根据Html头判断
+                Encoding Encode = null;
                 string Content = null;
                 //缓冲区长度
                 const int N_CacheLength = 10000;
@@ -59,6 +60,7 @@ namespace TNIdea.Common.Helper
                         ResponseStream = new DeflateStream(
                             httpResponse.GetResponseStream(), CompressionMode.Decompress);
                         break;
+
                     default:
                         ResponseStream = httpResponse.GetResponseStream();
                         break;
@@ -81,40 +83,48 @@ namespace TNIdea.Common.Helper
                         cache += (char)b;
                     }
 
-
-                    if (encode == null)
+                    try
                     {
-                        try
+
+                        if (httpResponse.CharacterSet == "ISO-8859-1" || httpResponse.CharacterSet == "zh-cn")
                         {
-                            if (httpResponse.CharacterSet == "ISO-8859-1" || httpResponse.CharacterSet == "zh-cn")
+                            Match match = Regex.Match(
+                                              cache, CharsetReg,
+                                              RegexOptions.IgnoreCase | RegexOptions.Multiline);
+                            if (match.Success)
                             {
-                                Match match = Regex.Match(cache, CharsetReg, RegexOptions.IgnoreCase | RegexOptions.Multiline);
-                                if (match.Success)
+                                try
                                 {
-                                    try
-                                    {
-                                        string charset = match.Groups["Charset"].Value;
-                                        encode = Encoding.GetEncoding(charset);
-                                    }
-                                    catch { }
+                                    string charset = match.Groups["Charset"].Value;
+                                    Encode = System.Text.Encoding.GetEncoding(charset);
                                 }
-                                else
-                                    encode = Encoding.GetEncoding("GB2312");
+                                catch
+                                {
+                                }
                             }
                             else
-                                encode = Encoding.GetEncoding(httpResponse.CharacterSet);
+                            {
+                                Encode = System.Text.Encoding.GetEncoding("GB2312");
+                            }
+
                         }
-                        catch { }
+                        else
+                        {
+                            Encode = System.Text.Encoding.GetEncoding(httpResponse.CharacterSet);
+                        }
+                    }
+                    catch
+                    {
                     }
 
                     //缓冲字节重新编码，然后再把流读完
-                    var Reader = new StreamReader(ResponseStream, encode);
-                    Content = encode.GetString(bytes.ToArray(), 0, count) + Reader.ReadToEnd();
+                    var Reader = new StreamReader(ResponseStream, Encode);
+                    Content = Encode.GetString(bytes.ToArray(), 0, count) + Reader.ReadToEnd();
                     Reader.Close();
                 }
                 catch (Exception ex)
                 {
-                    return ex.ToString();
+					return ex.ToString();
                 }
                 finally
                 {
@@ -332,32 +342,116 @@ namespace TNIdea.Common.Helper
             }
         }
 
-        /// <summary>
-        /// 遍历CookieContainer
-        /// </summary>
-        /// <param name="cookieContainer"></param>
-        /// <returns>List of cookie</returns>
-        public static Dictionary<string, string> GetAllCookies(CookieContainer cookieContainer)
+		/// <summary>
+		/// 遍历CookieContainer
+		/// </summary>
+		/// <param name="cookieContainer"></param>
+		/// <returns>List of cookie</returns>
+		public static Dictionary<string, string> GetAllCookies(CookieContainer cookieContainer)
+		{
+			Dictionary<string, string> cookies = new Dictionary<string, string>();
+
+			Hashtable table = (Hashtable)cookieContainer.GetType().InvokeMember("m_domainTable",
+				System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.GetField |
+				System.Reflection.BindingFlags.Instance, null, cookieContainer, new object[] { });
+
+			foreach (string pathList in table.Keys)
+			{
+				StringBuilder _cookie = new StringBuilder ();
+				SortedList cookieColList = (SortedList)table[pathList].GetType().InvokeMember("m_list",
+					System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.GetField
+					| System.Reflection.BindingFlags.Instance, null, table[pathList], new object[] { });
+				foreach (CookieCollection colCookies in cookieColList.Values)
+					foreach (Cookie c in colCookies)
+						_cookie.Append (c.Name + "=" + c.Value + ";");
+
+				cookies.Add (pathList, _cookie.ToString ().TrimEnd (';'));
+			}
+			return cookies;
+		}
+
+        public static CookieCollection ConvertToCookieCollection(Dictionary<string, string> cookies, string strHost)
         {
-            Dictionary<string, string> cookies = new Dictionary<string, string>();
+            CookieCollection cc = new CookieCollection();
 
-            Hashtable table = (Hashtable)cookieContainer.GetType().InvokeMember("m_domainTable",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.GetField |
-                System.Reflection.BindingFlags.Instance, null, cookieContainer, new object[] { });
-
-            foreach (string pathList in table.Keys)
+            int alcount = cookies.Count;
+            string strEachCook;
+            string[] strEachCookParts;
+            foreach (var cookie in cookies)
             {
-                StringBuilder _cookie = new StringBuilder();
-                SortedList cookieColList = (SortedList)table[pathList].GetType().InvokeMember("m_list",
-                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.GetField
-                    | System.Reflection.BindingFlags.Instance, null, table[pathList], new object[] { });
-                foreach (CookieCollection colCookies in cookieColList.Values)
-                    foreach (Cookie c in colCookies)
-                        _cookie.Append(c.Name + "=" + c.Value + ";");
+                strEachCook = cookie.Value;
+                strEachCookParts = strEachCook.Split(';');
+                int intEachCookPartsCount = strEachCookParts.Length;
+                string strCNameAndCValue = string.Empty;
+                string strPNameAndPValue = string.Empty;
+                string strDNameAndDValue = string.Empty;
+                string[] NameValuePairTemp;
+                Cookie cookTemp = new Cookie();
 
-                cookies.Add(pathList, _cookie.ToString().TrimEnd(';'));
+                for (int j = 0; j < intEachCookPartsCount; j++)
+                {
+                    if (j == 0)
+                    {
+                        strCNameAndCValue = strEachCookParts[j];
+                        if (strCNameAndCValue != string.Empty)
+                        {
+                            int firstEqual = strCNameAndCValue.IndexOf("=");
+                            string firstName = strCNameAndCValue.Substring(0, firstEqual);
+                            string allValue = strCNameAndCValue.Substring(firstEqual + 1, strCNameAndCValue.Length - (firstEqual + 1));
+                            cookTemp.Name = firstName;
+                            cookTemp.Value = allValue;
+                        }
+                        continue;
+                    }
+                    if (strEachCookParts[j].IndexOf("path", StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        strPNameAndPValue = strEachCookParts[j];
+                        if (strPNameAndPValue != string.Empty)
+                        {
+                            NameValuePairTemp = strPNameAndPValue.Split('=');
+                            if (NameValuePairTemp[1] != string.Empty)
+                            {
+                                cookTemp.Path = NameValuePairTemp[1];
+                            }
+                            else
+                            {
+                                cookTemp.Path = "/";
+                            }
+                        }
+                        continue;
+                    }
+
+                    if (strEachCookParts[j].IndexOf("domain", StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        strPNameAndPValue = strEachCookParts[j];
+                        if (strPNameAndPValue != string.Empty)
+                        {
+                            NameValuePairTemp = strPNameAndPValue.Split('=');
+
+                            if (NameValuePairTemp[1] != string.Empty)
+                            {
+                                cookTemp.Domain = NameValuePairTemp[1];
+                            }
+                            else
+                            {
+                                cookTemp.Domain = strHost;
+                            }
+                        }
+                        continue;
+                    }
+                }
+
+                if (cookTemp.Path == string.Empty)
+                {
+                    cookTemp.Path = "/";
+                }
+                if (cookTemp.Domain == string.Empty)
+                {
+                    cookTemp.Domain = strHost;
+                }
+                cc.Add(cookTemp);
             }
-            return cookies;
+            return cc;
         }
     }
 }
