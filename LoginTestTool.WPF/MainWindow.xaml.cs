@@ -1,7 +1,9 @@
 ﻿using ImitateLogin;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Net;
 using System.Windows;
+using TNIdea.Common.Helper;
 
 namespace LoginTestTool.WPF
 {
@@ -25,7 +27,9 @@ namespace LoginTestTool.WPF
                 return;
 
             LoginHelper loginHelper = new LoginHelper();
-            txtStatus.Text = JsonConvert.SerializeObject(loginHelper.Login(txtUserName.Text, txtPassword.Password, Enums.GetEnumName<LoginSite>(cmbLoginSite.SelectedValue.ToString())).Cookies);
+            LoginResult loginResult = loginHelper.Login(txtUserName.Text, txtPassword.Password, Enums.GetEnumName<LoginSite>(cmbLoginSite.SelectedValue.ToString()));
+
+            txtStatus.Text = JsonConvert.SerializeObject(loginResult.Cookies);
         }
 
         private void btnReset_Click(object sender, RoutedEventArgs e)

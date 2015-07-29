@@ -37,7 +37,7 @@ namespace ImitateLogin
 					string home_url = "http://weibo.com/tnidea/";
 					string result = HttpHelper.GetHttpContent(home_url, cookies: cookies);
 
-					if (string.IsNullOrWhiteSpace(result) || result.Contains("账号存在异常") || !result.Contains("$CONFIG['islogin']='1'"))
+                    if (string.IsNullOrWhiteSpace(result) || result.Contains("账号存在异常") || !result.Contains("$CONFIG['islogin']='1'"))
 					{
 						return new LoginResult(){Result= ResultType.AccounntLimit,Msg= "Fail, Msg: Login fail! Maybe you account is disable or captcha is needed."};
 					}
