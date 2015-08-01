@@ -10,6 +10,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections;
+using HtmlAgilityPack;
 
 namespace TNIdea.Common.Helper
 {
@@ -393,6 +394,24 @@ namespace TNIdea.Common.Helper
                 }
             }
             return cookieContainer;
+        }
+
+        public static string BuildPostData(string htmlContent)
+        {
+            HtmlDocument htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(htmlContent);
+            //Get the form node collection.
+            HtmlNode htmlNode = htmlDoc.DocumentNode.SelectSingleNode("//form");
+            HtmlNodeCollection htmlInputs = htmlNode.SelectNodes("//input");
+
+            StringBuilder postData = new StringBuilder();
+
+            foreach (HtmlNode input in htmlInputs)
+            {
+                if (input.Attributes["name"] != null && input.Attributes["value"] != null)
+                    postData.Append(input.Attributes["name"].Value + "=" + input.Attributes["value"].Value + "&");
+            }
+            return postData.ToString().TrimEnd('&');
         }
     }
 }

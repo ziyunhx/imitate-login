@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BigInteger.cs" />
+    <Compile Include="Data\HttpResponse.cs" />
     <Compile Include="Helper\HttpHelper.cs" />
     <Compile Include="Helper\RSAHelper.cs" />
     <Compile Include="Helper\TimeHelper.cs" />
