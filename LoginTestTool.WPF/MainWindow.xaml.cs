@@ -1,9 +1,7 @@
 ﻿using ImitateLogin;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Net;
 using System.Windows;
-using TNIdea.Common.Helper;
 
 namespace LoginTestTool.WPF
 {

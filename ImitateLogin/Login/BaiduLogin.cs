@@ -1,11 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Net;
-using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Web;
-using TNIdea.Common.Helper;
+using Thrinax.Helper;
 
 /* 错误代码
 "-1":       "系统错误,请您稍后再试",

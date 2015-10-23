@@ -3,7 +3,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
-using TNIdea.Common.Helper;
+using Thrinax.Helper;
 
 namespace ImitateLogin
 {
