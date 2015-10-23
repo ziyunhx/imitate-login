@@ -71,9 +71,11 @@ namespace ImitateLogin
                 string KEY = pubkeyJson.key;
 
                 //3. Build post data
-                string login_data = "staticpage=https%3A%2F%2Fwww.baidu.com%2Fcache%2Fuser%2Fhtml%2Fv3Jump.html&charset=UTF-8&token={0}&tpl=mn&subpro=&apiver=v3&tt={1}&codestring=&safeflg=0&u=https%3A%2F%2Fwww.baidu.com%2F&isPhone=false&detect=1&quick_user=0&logintype=dialogLogin&logLoginType=pc_loginDialog&idc=&loginmerge=true&splogin=rate&username={2}&password={3}&verifycode=&mem_pass=on&rsakey={4}&crypttype=12&ppui_logintime=13540&gid={5}";
+                string login_data = string.Format("staticpage=http%3A%2F%2Fapp.baidu.com%2Fsfile%2Fv3Jump.html&charset=UTF-8&token={0}&tpl=wise&subpro=&apiver=v3&tt={1}&codestring=&safeflg=0&u=%0D%0A%0D%0Ahttp%3A%2F%2Fapp.baidu.com%2Findex%3Fregdev%3D1&isPhone=false&quick_user=0&logintype=dialogLogin&logLoginType=pc_loginDialog&idc=&loginmerge=true&splogin=newuser&username={2}&password={3}&verifycode=&mem_pass=on&rsakey={4}&crypttype=12&ppui_logintime=426406&callback=parent.bd__pcbs__mwrr8d", token, TimeHelper.ConvertDateTimeInt(DateTime.Now), HttpUtility.UrlEncode(UserName), HttpUtility.UrlEncode(get_pwa_rsa(Password)), HttpUtility.UrlEncode(KEY));
 
-                login_data = string.Format(login_data, token, TimeHelper.ConvertDateTimeInt(DateTime.Now), HttpUtility.UrlEncode(UserName, Encoding.UTF8), Escape(get_pwa_rsa(Password)), KEY, Guid.NewGuid().ToString());
+                //string login_data = "staticpage=https%3A%2F%2Fwww.baidu.com%2Fcache%2Fuser%2Fhtml%2Fv3Jump.html&charset=UTF-8&token={0}&tpl=mn&subpro=&apiver=v3&tt={1}&codestring=&safeflg=0&u=https%3A%2F%2Fwww.baidu.com%2F&isPhone=false&detect=1&quick_user=0&logintype=dialogLogin&logLoginType=pc_loginDialog&idc=&loginmerge=true&splogin=rate&username={2}&password={3}&verifycode=&mem_pass=on&rsakey={4}&crypttype=12&ppui_logintime=13540&gid={5}";
+
+                //login_data = string.Format(login_data, token, TimeHelper.ConvertDateTimeInt(DateTime.Now), HttpUtility.UrlEncode(UserName, Encoding.UTF8), Escape(get_pwa_rsa(Password)), KEY, Guid.NewGuid().ToString());
 
                 //4. Post the login data
                 string login_url = "https://passport.baidu.com/v2/api/?login";

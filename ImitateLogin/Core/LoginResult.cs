@@ -5,18 +5,13 @@
  *  @generated
  */
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using System.IO;
-using Thrift;
-using Thrift.Collections;
 using Thrift.Protocol;
-using Thrift.Transport;
 namespace ImitateLogin
 {
 
-	[Serializable]
+    [Serializable]
 	public partial class LoginResult : TBase
 	{
 		private ResultType _Result;
