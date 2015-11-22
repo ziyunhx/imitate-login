@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Diagnostics;
 using System.Net;
 using System.Text;
 using System.Web;
@@ -41,51 +42,50 @@ namespace ImitateLogin
 
         public LoginResult DoLogin(string UserName, string Password)
         {
+            Stopwatch stopwatch = new Stopwatch();
             cookies = new CookieContainer();
 
             try
             {
-                //1. Get the token.
-                string passApiUrl = "https://passport.baidu.com/passApi/html/_blank.html";
-                HttpHelper.GetHttpContent(passApiUrl, null, cookies);
+                stopwatch.Start();
+                HttpHelper.GetHttpContent("https://passport.baidu.com/passApi/html/_blank.html", cookies: cookies, cookiesDomain: "passport.baidu.com");
 
-                string token_url = "https://passport.baidu.com/v2/api/?getapi&tpl=mn&apiver=v3&class=login&logintype=dialogLogin";
-                string prepareContent = HttpHelper.GetHttpContent(token_url, null, cookies, referer: "https://www.baidu.com/", encode: Encoding.GetEncoding("GB2312"));
+                //1. Get the token.
+                string token_url = string.Format("https://passport.baidu.com/v2/api/?getapi&tpl=mn&apiver=v3&tt={0}&class=login&gid={1}&logintype=dialogLogin&callback=bd__cbs__{2}", TimeHelper.ConvertDateTimeInt(DateTime.Now), Guid.NewGuid().ToString().ToUpper(), build_callback());
+                string prepareContent = HttpHelper.GetHttpContent(token_url, null, cookies, referer: "https://www.baidu.com/", encode: Encoding.GetEncoding("GB2312"), cookiesDomain: "passport.baidu.com");
                 //string prepareJson = prepareContent.Split('(')[1].Split(')')[0];
-                dynamic prepareJson = JsonConvert.DeserializeObject(prepareContent.Substring(0, prepareContent.LastIndexOf('}') + 1));
+                dynamic prepareJson = JsonConvert.DeserializeObject(prepareContent.Split('(')[1].Split(')')[0]);
                 string token = prepareJson.data.token;
-                //check login
-                string check_url = "https://passport.baidu.com/v2/api/?logincheck&token={0}&tpl=mn&apiver=v3&tt={1}&username={2}&isphone=false";
-                string checkContent = HttpHelper.GetHttpContent(string.Format(check_url, token, TimeHelper.ConvertDateTimeInt(DateTime.Now), HttpUtility.UrlEncode(UserName, Encoding.UTF8)), null, cookies, referer: "https://www.baidu.com/");
-                //codeString will at checkContent
-                //https://passport.baidu.com/cgi-bin/genimage?codestring&v=timestamp
+
+                ////check login
+                string check_url = "https://passport.baidu.com/v2/api/?loginhistory&token={0}&tpl=mn&apiver=v3&tt={1}&gid={2}&callback=bd__cbs__{3}";
+                string checkContent = HttpHelper.GetHttpContent(string.Format(check_url, token, TimeHelper.ConvertDateTimeInt(DateTime.Now), Guid.NewGuid().ToString().ToUpper(), build_callback()), null, cookies, referer: "https://www.baidu.com/", cookiesDomain: "passport.baidu.com");
 
                 //2. Get public key
-                string pubkey_url = "https://passport.baidu.com/v2/getpublickey?token={0}&tpl=mn&apiver=v3";
-                string pubkeyContent = HttpHelper.GetHttpContent(string.Format(pubkey_url, token), null, cookies, referer: "https://www.baidu.com/", encode: Encoding.GetEncoding("GB2312"));
+                string pubkey_url = "https://passport.baidu.com/v2/getpublickey?token={0}&tpl=mn&apiver=v3&tt={1}&gid={2}&callback=bd__cbs__{3}";
+                string pubkeyContent = HttpHelper.GetHttpContent(string.Format(pubkey_url, token, TimeHelper.ConvertDateTimeInt(DateTime.Now), Guid.NewGuid().ToString().ToUpper(), build_callback()), null, cookies, referer: "https://www.baidu.com/", encode: Encoding.GetEncoding("GB2312"), cookiesDomain: "passport.baidu.com");
 
-                dynamic pubkeyJson = JsonConvert.DeserializeObject(pubkeyContent.Substring(0, pubkeyContent.LastIndexOf('}') + 1));
+                dynamic pubkeyJson = JsonConvert.DeserializeObject(pubkeyContent.Split('(')[1].Split(')')[0]);
                 rsa_pub_baidu = pubkeyJson.pubkey;
                 string KEY = pubkeyJson.key;
 
+                stopwatch.Stop();
                 //3. Build post data
-                string login_data = string.Format("staticpage=http%3A%2F%2Fapp.baidu.com%2Fsfile%2Fv3Jump.html&charset=UTF-8&token={0}&tpl=wise&subpro=&apiver=v3&tt={1}&codestring=&safeflg=0&u=%0D%0A%0D%0Ahttp%3A%2F%2Fapp.baidu.com%2Findex%3Fregdev%3D1&isPhone=false&quick_user=0&logintype=dialogLogin&logLoginType=pc_loginDialog&idc=&loginmerge=true&splogin=newuser&username={2}&password={3}&verifycode=&mem_pass=on&rsakey={4}&crypttype=12&ppui_logintime=426406&callback=parent.bd__pcbs__mwrr8d", token, TimeHelper.ConvertDateTimeInt(DateTime.Now), HttpUtility.UrlEncode(UserName), HttpUtility.UrlEncode(get_pwa_rsa(Password)), HttpUtility.UrlEncode(KEY));
+                string login_data = "staticpage=https%3A%2F%2Fwww.baidu.com%2Fcache%2Fuser%2Fhtml%2Fv3Jump.html&charset=UTF-8&token={0}&tpl=mn&subpro=&apiver=v3&tt={1}&codestring=&safeflg=0&u=https%3A%2F%2Fwww.baidu.com%2F&isPhone=&detect=1&gid={2}&quick_user=0&logintype=dialogLogin&logLoginType=pc_loginDialog&idc=&loginmerge=true&splogin=rate&username={3}&password={4}&verifycode=&mem_pass=on&rsakey={5}&crypttype=12&ppui_logintime={6}&countrycode=&callback=parent.bd__pcbs__{7}";
 
-                //string login_data = "staticpage=https%3A%2F%2Fwww.baidu.com%2Fcache%2Fuser%2Fhtml%2Fv3Jump.html&charset=UTF-8&token={0}&tpl=mn&subpro=&apiver=v3&tt={1}&codestring=&safeflg=0&u=https%3A%2F%2Fwww.baidu.com%2F&isPhone=false&detect=1&quick_user=0&logintype=dialogLogin&logLoginType=pc_loginDialog&idc=&loginmerge=true&splogin=rate&username={2}&password={3}&verifycode=&mem_pass=on&rsakey={4}&crypttype=12&ppui_logintime=13540&gid={5}";
-
-                //login_data = string.Format(login_data, token, TimeHelper.ConvertDateTimeInt(DateTime.Now), HttpUtility.UrlEncode(UserName, Encoding.UTF8), Escape(get_pwa_rsa(Password)), KEY, Guid.NewGuid().ToString());
+                login_data = string.Format(login_data, token, TimeHelper.ConvertDateTimeInt(DateTime.Now), Guid.NewGuid().ToString().ToUpper(), HttpUtility.UrlEncode(UserName), HttpUtility.UrlEncode(get_pwa_rsa(Password)), HttpUtility.UrlEncode(KEY), stopwatch.ElapsedMilliseconds, build_callback());
 
                 //4. Post the login data
                 string login_url = "https://passport.baidu.com/v2/api/?login";
-
-                string Content = HttpHelper.GetHttpContent(login_url, login_data, cookies, referer: "https://www.baidu.com/");
+                
+                string Content = HttpHelper.GetHttpContent(login_url, login_data, cookies, referer: "https://www.baidu.com/", cookiesDomain: "passport.baidu.com");
 
 
                 string home_url = "https://www.baidu.com";
-                string result = HttpHelper.GetHttpContent(home_url, cookies: cookies);
+                string result = HttpHelper.GetHttpContent(home_url, cookies: cookies, cookiesDomain: "passport.baidu.com");
 
                 //5. Verifty the login result
-                if (string.IsNullOrWhiteSpace(result) || result.Contains("账号存在异常") || !result.Contains("$CONFIG['islogin']='1'"))
+                if (string.IsNullOrWhiteSpace(result) || result.Contains("账号存在异常") || !result.Contains("bds.comm.user=\""))
                 {
                     return new LoginResult() { Result = ResultType.AccounntLimit, Msg = "Fail, Msg: Login fail! Maybe you account is disable or captcha is needed." };
                 }
@@ -114,26 +114,30 @@ namespace ImitateLogin
             return rsaHelper.Encrypt(password);
         }
 
-        /// <summary>
-        /// #%&+=\/\\\ \　\f\r\n\t
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static string Escape(string str)
+        private string build_callback()
         {
-            StringBuilder sb = new StringBuilder();
-            foreach (char c in str)
+            return getRandomStr(6);
+        }
+
+        private string getRandomStr(int count)
+        {
+            int number;
+            string checkCode = String.Empty;
+
+            Random random = new Random();
+
+            for (int i = 0; i < count; i++)
             {
-                if (c == '#' || c == '%' || c == '&' || c == '+' || c == '=' || c == '　'
-                || c == '/' || c == '\\' || c == ' ' || c == '\f' || c == '\r' || c == '\n' || c == '\t')
-                {
-                    string temp = Convert.ToString(256 + (int)c, 16);
-                    sb.Append("%" + temp.Substring(1).ToUpper());
-                }
+                number = random.Next();
+                number = number % 36;
+
+                if (number < 10)
+                    number += 48;
                 else
-                    sb.Append(c.ToString());
+                    number += 87;
+                checkCode += ((char)number).ToString();
             }
-            return sb.ToString();
+            return checkCode;
         }
 
     }
