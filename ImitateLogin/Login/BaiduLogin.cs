@@ -101,11 +101,6 @@ namespace ImitateLogin
             return loginResult;
         }
 
-        /// <summary>
-		/// 获取RSA加密后的密码密文
-		/// </summary>
-		/// <param name="password"></param>
-		/// <returns></returns>
 		private string get_pwa_rsa(string password)
         {
             RSAHelper rsaHelper = new RSAHelper();
@@ -139,6 +134,5 @@ namespace ImitateLogin
             }
             return checkCode;
         }
-
     }
 }

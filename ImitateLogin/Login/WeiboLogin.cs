@@ -7,16 +7,19 @@ using Thrinax.Helper;
 
 namespace ImitateLogin
 {
+    /// <summary>
+    /// Weibo Login
+    /// </summary>
     public class WeiboLogin : ILogin
 	{
 		private string servertime, nonce, rsakv, weibo_rsa_n, prelt;
 		public CookieContainer cookies { set; get;}
 
 		/// <summary>
-		/// weibo登录获取Cookies
+		/// weibo login
 		/// </summary>
-		/// <param name="UserName">用户名</param>
-		/// <param name="Password">密码</param>
+		/// <param name="UserName">user name</param>
+		/// <param name="Password">password</param>
 		/// <returns>Login result</returns>
 		public LoginResult DoLogin(string UserName, string Password)
 		{
@@ -56,10 +59,10 @@ namespace ImitateLogin
 		}
 
 		/// <summary>
-		/// 获取登录前状态
+		/// get prepare login status.
 		/// </summary>
-		/// <param name="UserName">用户名</param>
-		/// <returns>是否成功获取</returns>
+		/// <param name="UserName">user name</param>
+		/// <returns>is success?</returns>
 		private bool GetPreloginStatus(string UserName)
 		{
 			try
@@ -85,7 +88,7 @@ namespace ImitateLogin
 		}
 
 		/// <summary>
-		/// 获取Base64加密的UserName
+		/// Get Base64 encode UserName.
 		/// </summary>
 		/// <param name="UserName"></param>
 		/// <returns></returns>
@@ -97,7 +100,7 @@ namespace ImitateLogin
 		}
 
 		/// <summary>
-		/// 获取RSA加密后的密码密文
+		/// Get RSA encrypted password.
 		/// </summary>
 		/// <param name="password"></param>
 		/// <returns></returns>

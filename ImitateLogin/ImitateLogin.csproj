@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Login\BaiduLogin.cs" />
+    <Compile Include="Login\WeChatLogin.cs" />
     <Compile Include="Login\WeiboLogin.cs" />
     <Compile Include="Login\WeiboWapLogin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
