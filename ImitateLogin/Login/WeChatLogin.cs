@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using Thrinax.Helper;
 
-namespace ImitateLogin.Login
+namespace ImitateLogin
 {
     /// <summary>
     /// Wechat Login. Need heart beat sync.

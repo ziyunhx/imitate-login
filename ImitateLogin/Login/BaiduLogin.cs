@@ -6,7 +6,7 @@ using System.Text;
 using System.Web;
 using Thrinax.Helper;
 
-/* 错误代码
+/* err code
 "-1":       "系统错误,请您稍后再试",
 "1":        "您输入的帐号格式不正确",
 "2":        "您输入的帐号不存在",
