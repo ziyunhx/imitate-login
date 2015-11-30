@@ -57,10 +57,6 @@ namespace ImitateLogin
                 dynamic prepareJson = JsonConvert.DeserializeObject(prepareContent.Split('(')[1].Split(')')[0]);
                 string token = prepareJson.data.token;
 
-                ////check login
-                string check_url = "https://passport.baidu.com/v2/api/?loginhistory&token={0}&tpl=mn&apiver=v3&tt={1}&gid={2}&callback=bd__cbs__{3}";
-                string checkContent = HttpHelper.GetHttpContent(string.Format(check_url, token, TimeHelper.ConvertDateTimeInt(DateTime.Now), Guid.NewGuid().ToString().ToUpper(), build_callback()), null, cookies, referer: "https://www.baidu.com/", cookiesDomain: "passport.baidu.com");
-
                 //2. Get public key
                 string pubkey_url = "https://passport.baidu.com/v2/getpublickey?token={0}&tpl=mn&apiver=v3&tt={1}&gid={2}&callback=bd__cbs__{3}";
                 string pubkeyContent = HttpHelper.GetHttpContent(string.Format(pubkey_url, token, TimeHelper.ConvertDateTimeInt(DateTime.Now), Guid.NewGuid().ToString().ToUpper(), build_callback()), null, cookies, referer: "https://www.baidu.com/", encode: Encoding.GetEncoding("GB2312"), cookiesDomain: "passport.baidu.com");
@@ -77,9 +73,7 @@ namespace ImitateLogin
 
                 //4. Post the login data
                 string login_url = "https://passport.baidu.com/v2/api/?login";
-                
-                string Content = HttpHelper.GetHttpContent(login_url, login_data, cookies, referer: "https://www.baidu.com/", cookiesDomain: "passport.baidu.com");
-
+                HttpHelper.GetHttpContent(login_url, login_data, cookies, referer: "https://www.baidu.com/", cookiesDomain: "passport.baidu.com");
 
                 string home_url = "https://www.baidu.com";
                 string result = HttpHelper.GetHttpContent(home_url, cookies: cookies, cookiesDomain: "passport.baidu.com");

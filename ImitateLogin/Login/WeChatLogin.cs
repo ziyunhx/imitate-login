@@ -37,7 +37,7 @@ namespace ImitateLogin
         /// <returns></returns>
         public LoginResult DoLogin(string UserName, string Password)
         {
-            string logincontent = HttpHelper.GetHttpContent("https://wx.qq.com/?&lang=zh_CN", cookies: cookies);
+            HttpHelper.GetHttpContent("https://wx.qq.com/?&lang=zh_CN", cookies: cookies);
 
             //request the image, and send this image url to email.
             string QRLogin = Thrinax.Helper.HttpHelper.GetHttpContent("https://login.weixin.qq.com/jslogin?appid=wx782c26e4c19acffb&redirect_uri=https%3A%2F%2Fwx.qq.com%2Fcgi-bin%2Fmmwebwx-bin%2Fwebwxnewloginpage&fun=new&lang=zh_CN&_=" + TimeHelper.ConvertDateTimeInt(DateTime.Now), cookies: cookies);
