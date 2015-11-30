@@ -32,7 +32,7 @@ using Thrinax.Helper;
 namespace ImitateLogin
 {
     /// <summary>
-    /// 
+    /// baidu login.
     /// </summary>
     public class BaiduLogin : ILogin
     {

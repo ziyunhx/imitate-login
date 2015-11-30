@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 
 namespace ImitateLogin
 {
@@ -8,20 +9,15 @@ namespace ImitateLogin
 
         public LoginResult DoLogin(string UserName, string Password)
         {
-            //login url
-            string loginUrl = "https://login.taobao.com/member/login.jhtml";
+			//login url
+			string loginUrl = "https://login.taobao.com/member/login.jhtml";
 
-            //need read the ua.js
+			//need read the ua.js
             throw new NotImplementedException();
         }
 
-        public System.Net.CookieContainer cookies
-        {
-            get;
-            set;
-        }
+		public CookieContainer cookies { set; get;}
 
         #endregion
     }
 }
-
