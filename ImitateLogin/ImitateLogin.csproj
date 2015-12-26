@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
@@ -44,7 +45,7 @@
     <Reference Include="Thrinax">
       <HintPath>..\Libs\Thrinax.dll</HintPath>
     </Reference>
-    <Reference Include="Thrift">
+    <Reference Include="Thrift, Version=0.9.3.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\ApacheThrift.0.9.3\lib\Thrift.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -53,6 +54,10 @@
     <Compile Include="Login\WeChatLogin.cs" />
     <Compile Include="Login\WeiboLogin.cs" />
     <Compile Include="Login\WeiboWapLogin.cs" />
+    <Compile Include="Plugins\MEFHelper.cs" />
+    <Compile Include="Plugins\PluginHelper.cs" />
+    <Compile Include="Plugins\RESTHelper.cs" />
+    <Compile Include="Plugins\ThriftHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\ILogin.cs" />
     <Compile Include="Core\Enums.cs" />
@@ -70,5 +75,8 @@
   -->
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
 </Project>
