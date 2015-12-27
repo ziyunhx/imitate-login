@@ -13,11 +13,9 @@ Support Mode
 
 #### Thrift RPC 
 
-#### HTTP RESRful
+#### HTTP RESTful
 
-#### IPC (File Listenter)
-
-#### Process Call
+#### MEF
 
 
 Config

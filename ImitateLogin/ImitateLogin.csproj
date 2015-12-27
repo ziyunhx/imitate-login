@@ -48,6 +48,10 @@
     <Reference Include="Thrift, Version=0.9.3.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\ApacheThrift.0.9.3\lib\Thrift.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Login\BaiduLogin.cs" />
@@ -64,6 +68,15 @@
     <Compile Include="LoginHelper.cs" />
     <Compile Include="Core\LoginResult.cs" />
     <Compile Include="Login\TaobaoLogin.cs" />
+    <Compile Include="Core\InterfacePlugin.cs" />
+    <Compile Include="Core\Config.cs" />
+    <Compile Include="Core\Extension.cs" />
+    <Compile Include="Core\Login.cs" />
+    <Compile Include="Core\LoginSite.cs" />
+    <Compile Include="Core\OperationObj.cs" />
+    <Compile Include="Core\PluginType.cs" />
+    <Compile Include="Core\ResultType.cs" />
+    <Compile Include="Core\ThriftOperation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
