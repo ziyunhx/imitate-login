@@ -67,3 +67,38 @@ struct LoginResult {
 service Login {
   LoginResult Login(1: string userName, 2: string password, 3: LoginSite loginSite);
 }
+
+## Plugins support start.
+enum PluginType {
+  //Managed Extensibility Framework
+  MEF = 1,
+  //Http RESTful
+  REST = 2,
+  //Thrift
+  Thrift = 3
+}
+
+struct Extension {
+  1: required PluginType ExtendType;
+  2: required set<LoginSite> SupportSite;
+  3: optional string Path;
+  4: optional string Host;
+  5: optional i32 Port;
+  6: optional string UrlFormat;
+  7: optional string HttpMethod;
+}
+
+struct Config {
+  1: required list<Extension> Extensions;
+}
+
+struct OperationObj {
+  1: required LoginSite loginSite;
+  2: optional string imageUrl;
+  3: optional binary image;
+}
+
+service ThriftOperation {
+  string Operation(1: OperationObj operationObj);
+}
+## Plugins support end.

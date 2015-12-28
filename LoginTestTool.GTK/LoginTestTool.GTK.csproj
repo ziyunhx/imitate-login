@@ -68,12 +68,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\ImitateLogin\ImitateLogin.csproj">
-      <Project>{D6B4E38E-1D46-4996-8527-302A1ADDB288}</Project>
-      <Name>ImitateLogin</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />

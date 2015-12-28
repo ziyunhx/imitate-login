@@ -40,7 +40,7 @@ namespace ImitateLogin
             HttpHelper.GetHttpContent("https://wx.qq.com/?&lang=zh_CN", cookies: cookies);
 
             //request the image, and send this image url to email.
-            string QRLogin = Thrinax.Helper.HttpHelper.GetHttpContent("https://login.weixin.qq.com/jslogin?appid=wx782c26e4c19acffb&redirect_uri=https%3A%2F%2Fwx.qq.com%2Fcgi-bin%2Fmmwebwx-bin%2Fwebwxnewloginpage&fun=new&lang=zh_CN&_=" + TimeHelper.ConvertDateTimeInt(DateTime.Now), cookies: cookies);
+            string QRLogin = HttpHelper.GetHttpContent("https://login.weixin.qq.com/jslogin?appid=wx782c26e4c19acffb&redirect_uri=https%3A%2F%2Fwx.qq.com%2Fcgi-bin%2Fmmwebwx-bin%2Fwebwxnewloginpage&fun=new&lang=zh_CN&_=" + TimeHelper.ConvertDateTimeInt(DateTime.Now), cookies: cookies);
 
             string QRUid = "";
             string qrUrl = "";
@@ -68,7 +68,7 @@ namespace ImitateLogin
                     Match m2 = Regex.Match(result, "redirect_uri=\"(?<redirect>.*?)\";");
                     if (m2.Success && m2.Groups["redirect"].Success)
                     {
-                        string redirectContent = Thrinax.Helper.HttpHelper.GetHttpContent(m2.Groups["redirect"].Value + "&fun=new&version=v2&lang=zh_CN", cookies: cookies, referer: WxUrl);
+                        string redirectContent = HttpHelper.GetHttpContent(m2.Groups["redirect"].Value + "&fun=new&version=v2&lang=zh_CN", cookies: cookies, referer: WxUrl);
                         Match m3 = Regex.Match(redirectContent, "<skey>(?<skey>.*?)</skey><wxsid>(?<wxsid>.*?)</wxsid><wxuin>(?<wxuin>.*?)</wxuin><pass_ticket>(?<pass_ticket>.*?)</pass_ticket>");
                         if (m3.Success && m3.Groups["skey"].Success && m3.Groups["wxsid"].Success && m3.Groups["wxuin"].Success && m3.Groups["pass_ticket"].Success)
                         {
