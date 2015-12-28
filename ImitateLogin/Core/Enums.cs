@@ -44,7 +44,17 @@ namespace ImitateLogin
 		ServiceError = 500,
 	}
 
-	public class Enums
+    /// <summary>
+    /// Plugin type
+    /// </summary>
+    public enum PluginType
+    {
+        MEF = 1,
+        REST = 2,
+        Thrift = 3,
+    }
+
+    public class Enums
 	{
 		/// <summary>
 		/// Gets the description.

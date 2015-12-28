@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using log4net;
+using Newtonsoft.Json;
+using System;
 using System.Drawing;
 using System.IO;
-using Newtonsoft.Json;
-using log4net;
+using System.Linq;
 
 namespace ImitateLogin
 {
-	/// <summary>
-	/// Plugin helper.
-	/// </summary>
-	public class PluginHelper
+    /// <summary>
+    /// Plugin helper.
+    /// </summary>
+    public class PluginHelper
     {
 		private static string configPath = Environment.CurrentDirectory + "/extension.conf";
 		private static object readLock = new object ();

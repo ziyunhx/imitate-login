@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI.WebControls;
 using Thrift.Transport;
 using Thrift.Protocol;
 using Thrinax.Helper;
 using log4net;
+using System.Drawing;
 
 namespace ImitateLogin
 {

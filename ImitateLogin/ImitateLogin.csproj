@@ -71,11 +71,7 @@
     <Compile Include="Core\InterfacePlugin.cs" />
     <Compile Include="Core\Config.cs" />
     <Compile Include="Core\Extension.cs" />
-    <Compile Include="Core\Login.cs" />
-    <Compile Include="Core\LoginSite.cs" />
     <Compile Include="Core\OperationObj.cs" />
-    <Compile Include="Core\PluginType.cs" />
-    <Compile Include="Core\ResultType.cs" />
     <Compile Include="Core\ThriftOperation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

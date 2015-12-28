@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using System.Text;
 using Thrift;
-using Thrift.Collections;
 using Thrift.Protocol;
-using Thrift.Transport;
+
+[assembly: log4net.Config.XmlConfigurator(Watch = true)]
 
 namespace ImitateLogin
 {
-	public class LoginHelper : Login.Iface
+    public class LoginHelper : Login.Iface
 	{
 		/// <summary>
 		/// Login the specified userName, password and loginSite.

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Web.UI.WebControls;
+using System.Drawing;
 
 namespace ImitateLogin
 {
