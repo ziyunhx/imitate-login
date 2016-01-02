@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.ComponentModel.Composition;
 using System.Net;
 using System.Text;
 using System.Web;
@@ -7,6 +8,8 @@ using Thrinax.Helper;
 
 namespace ImitateLogin
 {
+    [Export(typeof(ILogin))]
+    [ExportMetadata("loginSite", LoginSite.Weibo)]
     /// <summary>
     /// Weibo Login
     /// </summary>

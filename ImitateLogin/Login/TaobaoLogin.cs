@@ -1,8 +1,11 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Net;
 
 namespace ImitateLogin
 {
+    [Export(typeof(ILogin))]
+    [ExportMetadata("loginSite", LoginSite.Taobao)]
     public class TaobaoLogin : ILogin
     {
         #region ILogin implementation

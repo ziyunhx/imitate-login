@@ -48,6 +48,8 @@ enum LoginSite {
   QQ = 4,
   //Baidu
   Baidu = 5,
+  //WeChat
+  WeChat = 6,
   //Facebook
   Facebook = 21,
   //Twitter

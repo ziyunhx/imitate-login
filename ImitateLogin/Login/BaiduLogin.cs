@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Net;
 using System.Text;
@@ -31,6 +32,8 @@ using Thrinax.Helper;
 
 namespace ImitateLogin
 {
+    [Export(typeof(ILogin))]
+    [ExportMetadata("loginSite", LoginSite.Baidu)]
     /// <summary>
     /// baidu login.
     /// </summary>

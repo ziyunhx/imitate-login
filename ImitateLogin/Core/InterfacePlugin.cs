@@ -9,7 +9,7 @@ namespace ImitateLogin
 		string Operate(string imageUrl = "", Image image = null, params string[] param);
 	}
 
-	public interface IMEFOperationData
+	public interface ILoginSiteData
 	{
 		LoginSite loginSite { get; }
 	}

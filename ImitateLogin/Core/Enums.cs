@@ -20,6 +20,8 @@ namespace ImitateLogin
 		QQ = 4,
 		[Description("Baidu")]
 		Baidu = 5,
+        [Description("WeChat")]
+        WeChat = 6,
 		[Description("*Facebook")]
 		Facebook = 21,
 		[Description("*Twitter")]

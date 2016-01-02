@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -8,6 +9,8 @@ using Thrinax.Helper;
 
 namespace ImitateLogin
 {
+    [Export(typeof(ILogin))]
+    [ExportMetadata("loginSite", LoginSite.WeChat)]
     /// <summary>
     /// Wechat Login. Need heart beat sync.
     /// </summary>

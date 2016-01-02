@@ -14,15 +14,16 @@ namespace ImitateLogin
     public class MEFHelper
     {
 		[ImportMany]
-		IEnumerable<Lazy<IMEFOperation, IMEFOperationData>> operations;
+		IEnumerable<Lazy<IMEFOperation, ILoginSiteData>> operations;
 
 		private CompositionContainer _container;
+        ILog logger = LogManager.GetLogger(typeof(MEFHelper));
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ImitateLogin.MEFHelper"/> class.
-		/// </summary>
-		/// <param name="path">Path.</param>
-		public MEFHelper(string path = "")
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ImitateLogin.MEFHelper"/> class.
+        /// </summary>
+        /// <param name="path">Path.</param>
+        public MEFHelper(string path = "")
 		{
 			try
 			{
@@ -32,19 +33,21 @@ namespace ImitateLogin
 				catalog.Catalogs.Add(new AssemblyCatalog(typeof(MEFHelper).Assembly));
 
 				if (string.IsNullOrEmpty (path))
-					catalog.Catalogs.Add(new DirectoryCatalog(Path.Combine(Environment.CurrentDirectory, "Extensions/MEF")));
-				else
-					catalog.Catalogs.Add(new DirectoryCatalog(Path.Combine(Environment.CurrentDirectory, path)));
+					path = "Extensions";
 
-				//Create the CompositionContainer with the parts in the catalog
-				_container = new CompositionContainer(catalog);
+                if (Directory.Exists(Path.Combine(Environment.CurrentDirectory, path)))
+                    catalog.Catalogs.Add(new DirectoryCatalog(Path.Combine(Environment.CurrentDirectory, path)));
+                else
+                    logger.Warn("No MEF extensions path has configured.");
+
+                //Create the CompositionContainer with the parts in the catalog
+                _container = new CompositionContainer(catalog);
 
 				//Fill the imports of this object
 				this._container.ComposeParts(this);
 			}
 			catch (CompositionException compositionException)
 			{
-				ILog logger = LogManager.GetLogger(typeof(MEFHelper));
 				logger.Error(compositionException.ToString());
 			}
 		}
@@ -59,7 +62,7 @@ namespace ImitateLogin
 		{
 			try
 			{
-				foreach (Lazy<IMEFOperation, IMEFOperationData> i in operations)
+				foreach (Lazy<IMEFOperation, ILoginSiteData> i in operations)
 				{
 					if (i.Metadata.loginSite == loginSite)
 						return i.Value.Operate(imageUrl, image);

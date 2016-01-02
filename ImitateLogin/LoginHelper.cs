@@ -1,5 +1,8 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Text;
 using Thrift;
@@ -11,36 +14,78 @@ namespace ImitateLogin
 {
     public class LoginHelper : Login.Iface
 	{
-		/// <summary>
-		/// Login the specified userName, password and loginSite.
-		/// </summary>
-		/// <param name="userName">User name.</param>
-		/// <param name="password">Password.</param>
-		/// <param name="loginSite">Login site.</param>
-		/// <returns>cookies string</returns>
-		public LoginResult Login(string userName, string password, LoginSite loginSite)
+        [ImportMany]
+        IEnumerable<Lazy<ILogin, ILoginSiteData>> operations;
+
+        private CompositionContainer _container;
+        ILog logger = LogManager.GetLogger(typeof(LoginHelper));
+
+        public LoginHelper(string path = "")
+        {
+            try
+            {
+                //An aggregate catalog that combines multiple catalogs
+                var catalog = new AggregateCatalog();
+                //Adds all the parts found in the same assembly as the Program class
+                catalog.Catalogs.Add(new AssemblyCatalog(typeof(LoginHelper).Assembly));
+
+                if (string.IsNullOrEmpty(path))
+                    path = "Extensions";
+
+                if (Directory.Exists(Path.Combine(Environment.CurrentDirectory, path)))
+                    catalog.Catalogs.Add(new DirectoryCatalog(Path.Combine(Environment.CurrentDirectory, path)));
+                else
+                    logger.Warn("No MEF extensions path has configured.");
+
+                //Create the CompositionContainer with the parts in the catalog
+                _container = new CompositionContainer(catalog);
+
+                //Fill the imports of this object
+                this._container.ComposeParts(this);
+            }
+            catch (CompositionException compositionException)
+            {
+                logger.Error(compositionException.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Login the specified userName, password and loginSite.
+        /// </summary>
+        /// <param name="userName">User name.</param>
+        /// <param name="password">Password.</param>
+        /// <param name="loginSite">Login site.</param>
+        /// <returns>cookies string</returns>
+        public LoginResult Login(string userName, string password, LoginSite loginSite)
 		{
-			if (string.IsNullOrEmpty (userName) || string.IsNullOrEmpty (password))
-				return new LoginResult (){Result = ResultType.Failed, Msg = "error, username or password can't be null."};
+            LoginResult result = new LoginResult();
 
-			ILogin LoginClass = null;
+            if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
+            {
+                result.Result = ResultType.Failed;
+                result.Msg = "error, username or password can't be null.";
+            }
+            else
+            {
+                bool hasOperation = false;
 
-			switch (loginSite) {
-			case LoginSite.Weibo:
-				LoginClass = new WeiboLogin ();
-				break;
-			case LoginSite.WeiboWap:
-				LoginClass = new WeiboWapLogin ();
-				break;
-			case LoginSite.Baidu:
-				LoginClass = new BaiduLogin ();
-				break;
-			}
+                foreach (Lazy<ILogin, ILoginSiteData> i in operations)
+                {
+                    if (i.Metadata.loginSite.Equals(loginSite))
+                    {
+                        hasOperation = true;
+                        result = i.Value.DoLogin(userName, password);
+                    }
+                }
 
-			if(LoginClass == null)
-				return new LoginResult (){Result = ResultType.Failed, Msg = "error, can't find the login class."};
+                if (!hasOperation)
+                {
+                    result.Result = ResultType.Failed;
+                    result.Msg = "error, can't find the login class.";
+                }
+            }
 
-			return LoginClass.DoLogin (userName, password);
+            return result;
 		}
 	}
 
