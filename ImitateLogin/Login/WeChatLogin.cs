@@ -40,6 +40,8 @@ namespace ImitateLogin
         /// <returns></returns>
         public LoginResult DoLogin(string UserName, string Password)
         {
+            LoginResult loginResult = new LoginResult();
+
             HttpHelper.GetHttpContent("https://wx.qq.com/?&lang=zh_CN", cookies: cookies);
 
             //request the image, and send this image url to email.
@@ -55,44 +57,54 @@ namespace ImitateLogin
             }
 
             //send QR image to other process.
+            string qrResult = PluginHelper.Operation(LoginSite.WeChat, qrUrl, ImageHelper.GetImageByBytes(ImageHelper.GetBytesByImagePath(qrUrl)));
 
-            string strFmt = "https://login.weixin.qq.com/cgi-bin/mmwebwx-bin/login?loginicon=true&uuid={0}&tip=0&r={1}8&_={2}";
-
-            int i = 0;
-            do
+            if (!string.IsNullOrEmpty(qrResult))
             {
-                string result = HttpHelper.GetHttpContent(string.Format(strFmt, QRUid, "-595416181", TimeHelper.ConvertDateTimeInt(DateTime.Now)), cookies: cookies);
+                string strFmt = "https://login.weixin.qq.com/cgi-bin/mmwebwx-bin/login?loginicon=true&uuid={0}&tip=0&r={1}8&_={2}";
 
-                i++;
-
-                //If contains window.code=200, succ; If contains window.code=201, ready。
-                if (result.Contains("window.code=200;"))
+                int i = 0;
+                do
                 {
-                    Match m2 = Regex.Match(result, "redirect_uri=\"(?<redirect>.*?)\";");
-                    if (m2.Success && m2.Groups["redirect"].Success)
+                    string result = HttpHelper.GetHttpContent(string.Format(strFmt, QRUid, "-595416181", TimeHelper.ConvertDateTimeInt(DateTime.Now)), cookies: cookies);
+
+                    i++;
+
+                    //If contains window.code=200, succ; If contains window.code=201, ready。
+                    if (result.Contains("window.code=200;"))
                     {
-                        string redirectContent = HttpHelper.GetHttpContent(m2.Groups["redirect"].Value + "&fun=new&version=v2&lang=zh_CN", cookies: cookies, referer: WxUrl);
-                        Match m3 = Regex.Match(redirectContent, "<skey>(?<skey>.*?)</skey><wxsid>(?<wxsid>.*?)</wxsid><wxuin>(?<wxuin>.*?)</wxuin><pass_ticket>(?<pass_ticket>.*?)</pass_ticket>");
-                        if (m3.Success && m3.Groups["skey"].Success && m3.Groups["wxsid"].Success && m3.Groups["wxuin"].Success && m3.Groups["pass_ticket"].Success)
+                        Match m2 = Regex.Match(result, "redirect_uri=\"(?<redirect>.*?)\";");
+                        if (m2.Success && m2.Groups["redirect"].Success)
                         {
-                            skey = m3.Groups["skey"].Value;
-                            wxsid = m3.Groups["wxsid"].Value;
-                            wxuin = m3.Groups["wxuin"].Value;
-                            pass_ticket = m3.Groups["pass_ticket"].Value;
-                            synckey = "1_632280340%7C2_632280341%7C3_632280343%7C1000_" + TimeHelper.ConvertDateTimeInt(DateTime.Now) / 1000;
+                            string redirectContent = HttpHelper.GetHttpContent(m2.Groups["redirect"].Value + "&fun=new&version=v2&lang=zh_CN", cookies: cookies, referer: WxUrl);
+                            Match m3 = Regex.Match(redirectContent, "<skey>(?<skey>.*?)</skey><wxsid>(?<wxsid>.*?)</wxsid><wxuin>(?<wxuin>.*?)</wxuin><pass_ticket>(?<pass_ticket>.*?)</pass_ticket>");
+                            if (m3.Success && m3.Groups["skey"].Success && m3.Groups["wxsid"].Success && m3.Groups["wxuin"].Success && m3.Groups["pass_ticket"].Success)
+                            {
+                                skey = m3.Groups["skey"].Value;
+                                wxsid = m3.Groups["wxsid"].Value;
+                                wxuin = m3.Groups["wxuin"].Value;
+                                pass_ticket = m3.Groups["pass_ticket"].Value;
+                                synckey = "1_632280340%7C2_632280341%7C3_632280343%7C1000_" + TimeHelper.ConvertDateTimeInt(DateTime.Now) / 1000;
 
-                            tickTimer.Interval = 2000;
-                            tickTimer.Elapsed += new System.Timers.ElapsedEventHandler(SyncCheck);
-                            tickTimer.Start();
+                                tickTimer.Interval = 2000;
+                                tickTimer.Elapsed += new System.Timers.ElapsedEventHandler(SyncCheck);
+                                tickTimer.Start();
 
-                            break;
+                                loginResult.Result = ResultType.Success;
+                                loginResult.Msg = "Success";
+                                loginResult.Cookies = HttpHelper.GetAllCookies(cookies);
+                                return loginResult;
+                            }
                         }
                     }
                 }
+                while (i <= 20);
             }
-            while (i <= 20);
 
-            return null;
+            loginResult.Result = ResultType.Timeout;
+            loginResult.Msg = "error, no body scan the QR code in limited time.";
+
+            return loginResult;
         }
 
         /// <summary>
