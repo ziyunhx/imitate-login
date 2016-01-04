@@ -3,6 +3,7 @@ using Thrinax.Helper;
 using Newtonsoft.Json;
 using log4net;
 using System.Drawing;
+using System.Web;
 
 namespace ImitateLogin
 {
@@ -38,7 +39,7 @@ namespace ImitateLogin
 			{
 				if(_method.ToUpper() == "GET")
 				{
-					return HttpHelper.GetHttpContent(string.Format(_urlFormat, (int)loginSite, imageUrl));
+					return HttpHelper.GetHttpContent(string.Format(_urlFormat, (int)loginSite, HttpUtility.UrlEncode(imageUrl)));
 				}
 				else if(_method.ToUpper() == "POST")
 				{

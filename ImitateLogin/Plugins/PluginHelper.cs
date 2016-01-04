@@ -12,7 +12,7 @@ namespace ImitateLogin
     /// </summary>
     public class PluginHelper
     {
-		private static string configPath = Environment.CurrentDirectory + "/extension.conf";
+		private static string configPath = AppDomain.CurrentDomain.BaseDirectory + "extension.conf";
 		private static object readLock = new object ();
 
 		private static Config _pluginConfig = null;

@@ -3,7 +3,6 @@ using System.Web.Http;
 
 namespace MailNotication.Controllers
 {
-    [Authorize]
     public class MailController : ApiController
     {
         /// <summary>
@@ -16,7 +15,7 @@ namespace MailNotication.Controllers
             if (MailHelper.SendEmail(loginSite.ToString() + "登录中，请求协助！", string.Format("<img src=\"{0}\"><br /> {0}", imageUrl)))
                 return "success";
             else
-                return "";
+                return null;
         }
     }
 }

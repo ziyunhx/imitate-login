@@ -57,7 +57,7 @@ namespace ImitateLogin
             }
 
             //send QR image to other process.
-            string qrResult = PluginHelper.Operation(LoginSite.WeChat, qrUrl, ImageHelper.GetImageByBytes(ImageHelper.GetBytesByImagePath(qrUrl)));
+            string qrResult = PluginHelper.Operation(LoginSite.WeChat, qrUrl, null);
 
             if (!string.IsNullOrEmpty(qrResult))
             {

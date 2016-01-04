@@ -32,8 +32,10 @@ namespace ImitateLogin
                 if (string.IsNullOrEmpty(path))
                     path = "Extensions";
 
-                if (Directory.Exists(Path.Combine(Environment.CurrentDirectory, path)))
-                    catalog.Catalogs.Add(new DirectoryCatalog(Path.Combine(Environment.CurrentDirectory, path)));
+                if (Directory.Exists(path))
+                    catalog.Catalogs.Add(new DirectoryCatalog(path));
+                else if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path)))
+                    catalog.Catalogs.Add(new DirectoryCatalog(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path)));
                 else
                     logger.Warn("No MEF extensions path has configured.");
 
