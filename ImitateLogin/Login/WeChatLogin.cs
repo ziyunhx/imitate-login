@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Net;
@@ -84,7 +85,22 @@ namespace ImitateLogin
                                 wxsid = m3.Groups["wxsid"].Value;
                                 wxuin = m3.Groups["wxuin"].Value;
                                 pass_ticket = m3.Groups["pass_ticket"].Value;
-                                synckey = "1_632280340%7C2_632280341%7C3_632280343%7C1000_" + TimeHelper.ConvertDateTimeInt(DateTime.Now) / 1000;
+
+                                //wxInit, Get the synckey.
+                                string wxInitUrl = string.Format("https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxinit?r={0}&lang=zh_CN&pass_ticket={1}", TimeHelper.ConvertDateTimeInt(DateTime.Now) / 1000, pass_ticket);
+                                string wxInitPost = "{\"BaseRequest\":{\"Uin\":\"" + wxuin + "\",\"Sid\":\"" + wxsid + "\",\"Skey\":\"" + skey + "\",\"DeviceID\":\"" + BuildDeviceId() + "\"}}";
+                                do
+                                {
+                                    string wxInitContent = HttpHelper.GetHttpContent(wxInitUrl, wxInitPost,cookies, referer: "https://wx.qq.com/?&lang=zh_CN");
+                                    if (!string.IsNullOrEmpty(wxInitContent))
+                                    {
+                                        synckey = GetSyncKeyStr(wxInitContent);
+                                        if (!string.IsNullOrEmpty(synckey))
+                                            break;
+                                    }
+                                }
+                                while (true);
+
 
                                 tickTimer.Interval = 2000;
                                 tickTimer.Elapsed += new System.Timers.ElapsedEventHandler(SyncCheck);
@@ -106,6 +122,47 @@ namespace ImitateLogin
 
             return loginResult;
         }
+
+        /// <summary>
+        /// Get sync key string from http content.
+        /// </summary>
+        /// <param name="temp"></param>
+        /// <returns></returns>
+        private string GetSyncKeyStr(string httpContent)
+        {
+            MatchCollection matchs = Regex.Matches(httpContent, @"{\s""Key"": (?<key>\d*),\s""Val"": (?<val>\d*)\s}");
+            if (matchs != null && matchs.Count > 0)
+            {
+                List<string> syncKeys = new List<string>();
+                foreach (Match match in matchs)
+                {
+                    if (match.Success && match.Groups["key"].Success && match.Groups["val"].Success)
+                    {
+                        syncKeys.Add(match.Groups["key"].Value + "_" + match.Groups["val"].Value);
+                    }
+                }
+                return HttpUtility.UrlEncode(string.Join("|", syncKeys), Encoding.UTF8);
+            }
+            return "";
+        }
+
+        private string BuildSyncKey()
+        {
+            if (string.IsNullOrEmpty(synckey))
+                return "";
+
+            List<SyncKey> _syncKey = new List<SyncKey>();
+            string temp = HttpUtility.UrlDecode(synckey);
+            foreach (var str in temp.Split('|'))
+            {
+                SyncKey _key = new SyncKey();
+                _key.Key = str.Split('_')[0];
+                _key.val = str.Split('_')[1];
+                _syncKey.Add(_key);
+            }
+            return "{\"Count\":" + _syncKey.Count + ",\"List\":" + JsonConvert.SerializeObject(_syncKey) + "}";
+        }
+
 
         /// <summary>
         /// build a random device id.
@@ -145,5 +202,11 @@ namespace ImitateLogin
                 }
             }
         }
+    }
+
+    public class SyncKey
+    {
+        public string Key;
+        public string val;
     }
 }

@@ -3,6 +3,8 @@ using System.Configuration;
 using Thrift.Server;
 using Thrift.Transport;
 
+[assembly: log4net.Config.XmlConfigurator(Watch = true)]
+
 namespace ImitateLogin.Service
 {
     class Program
