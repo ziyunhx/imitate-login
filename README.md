@@ -30,11 +30,10 @@ How to use it?
  - The only method at this project is  `LoginResult Login(1: string userName, 2: string password, 3: LoginSite loginSite);`  on LoginHelper.cs.
  - You will get the result contain result type, descript message, cookies dictionary.
 
-Extensions Support
+Extensions
 -------
 
 There are some demo at plugins dir in order to tell you how to develop an extend plugin for imitate login.
-
 The extend plugins will be used for solve some problems such as CAPTCHA, second verify, QR code and so on.
 
 #### Support Mode
@@ -86,8 +85,6 @@ This is the format what config file support followed behind:
  - [RecogCAPTCHA](https://github.com/ziyunhx/imitate-login/tree/master/Extensions/RecogCAPTCHA) (Apache Thrift)
  - [CodePlatform](https://github.com/ziyunhx/imitate-login/tree/master/Extensions/CodePlatform) (MEF)
  - [PluginConfigBuild](https://github.com/ziyunhx/imitate-login/tree/master/Tools/PluginConfigBuild) (A tool for build plugin config file.)
-
-#### CAPTCHA (Thrift)
 
 License
 -------
