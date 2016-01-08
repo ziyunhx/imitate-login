@@ -12,7 +12,7 @@ namespace MailNotication.Controllers
         [HttpGet]
         public string SendMail(LoginSite loginSite, string imageUrl)
         {
-            if (MailHelper.SendEmail(loginSite.ToString() + "登录中，请求协助！", string.Format("<img src=\"{0}\"><br /> {0}", imageUrl)))
+            if (MailHelper.SendEmail(loginSite.ToString() + "Logining, please help me!", string.Format("<img src=\"{0}\"><br /> {0}", imageUrl)))
                 return "success";
             else
                 return null;
