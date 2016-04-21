@@ -11,7 +11,7 @@ This project is used fo imitate login the social network. Such as weibo, qq, fac
  - Weibo
  - WeiboWap
  - Baidu
- - WeChat
+ - ~~WeChat~~
 
 #### Plan to support
 
