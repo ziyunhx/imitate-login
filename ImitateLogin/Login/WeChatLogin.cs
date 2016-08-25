@@ -11,7 +11,7 @@ using Thrinax.Helper;
 namespace ImitateLogin
 {
     [Export(typeof(ILogin))]
-    [ExportMetadata("loginSite", LoginSite.WeChat)]
+    [ExportMetadata("loginSite", "WeChat")]
     /// <summary>
     /// Wechat Login. Need heart beat sync.
     /// </summary>
@@ -58,7 +58,7 @@ namespace ImitateLogin
             }
 
             //send QR image to other process.
-            string qrResult = PluginHelper.Operation(LoginSite.WeChat, qrUrl, null);
+			string qrResult = PluginHelper.Operation(LoginSite.WeChat.ToString(), qrUrl, null);
 
             if (!string.IsNullOrEmpty(qrResult))
             {

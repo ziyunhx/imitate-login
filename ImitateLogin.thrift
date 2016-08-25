@@ -55,7 +55,9 @@ enum LoginSite {
   //Twitter
   Twitter = 22,
   //Google
-  Google = 23
+  Google = 23,
+  //Universal
+	Universal = 99,
 }
 
 struct LoginResult {
@@ -68,6 +70,7 @@ struct LoginResult {
 
 service Login {
   LoginResult Login(1: string userName, 2: string password, 3: LoginSite loginSite);
+  LoginResult DoLogin(1: string userName, 2: string password, 3: string loginSite);
 }
 
 ## Plugins support start.
@@ -82,7 +85,7 @@ enum PluginType {
 
 struct Extension {
   1: required PluginType ExtendType;
-  2: required set<LoginSite> SupportSite;
+  2: required set<string> SupportSite;
   3: optional string Path;
   4: optional string Host;
   5: optional i32 Port;
@@ -95,7 +98,7 @@ struct Config {
 }
 
 struct OperationObj {
-  1: required LoginSite loginSite;
+  1: required string loginSite;
   2: optional string imageUrl;
   3: optional binary image;
 }

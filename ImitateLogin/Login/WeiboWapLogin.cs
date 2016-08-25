@@ -9,7 +9,7 @@ using Thrinax.Helper;
 namespace ImitateLogin
 {
     [Export(typeof(ILogin))]
-    [ExportMetadata("loginSite", LoginSite.WeiboWap)]
+    [ExportMetadata("loginSite", "WeiboWap")]
     public class WeiboWapLogin : ILogin
 	{
 		public CookieContainer cookies { set; get;}

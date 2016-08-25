@@ -33,7 +33,7 @@ using Thrinax.Helper;
 namespace ImitateLogin
 {
     [Export(typeof(ILogin))]
-    [ExportMetadata("loginSite", LoginSite.Baidu)]
+	[ExportMetadata("loginSite", "Baidu")]
     /// <summary>
     /// baidu login.
     /// </summary>

@@ -52,7 +52,7 @@ namespace ImitateLogin
 		/// <param name="loginSite">Login site.</param>
 		/// <param name="imageUrl">Image URL.</param>
 		/// <param name="image">Image.</param>
-		public static string Operation(LoginSite loginSite, string imageUrl = "", Image image = null)
+		public static string Operation(string loginSite, string imageUrl = "", Image image = null)
 		{
 			if (pluginConfig != null) {
 				var extensions = pluginConfig.Extensions.Where (f => f.SupportSite.Contains (loginSite));

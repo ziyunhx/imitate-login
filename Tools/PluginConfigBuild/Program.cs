@@ -22,8 +22,8 @@ namespace PluginConfigBuild
             Extension mailNotication = new Extension();
             mailNotication.ExtendType = PluginType.REST;
             mailNotication.HttpMethod = "GET";
-            mailNotication.SupportSite = new THashSet<LoginSite>();
-            mailNotication.SupportSite.Add(LoginSite.WeChat);
+            mailNotication.SupportSite = new THashSet<string>();
+			mailNotication.SupportSite.Add(LoginSite.WeChat.ToString());
             mailNotication.UrlFormat = "http://localhost:2920/Mail/SendMail?loginSite={0}&imageUrl={1}";
             pluginConfig.Extensions.Add(mailNotication);
 
@@ -31,9 +31,9 @@ namespace PluginConfigBuild
             Extension recogCaptcha = new Extension();
             recogCaptcha.ExtendType = PluginType.MEF;
             recogCaptcha.Path = "Extensions";
-            recogCaptcha.SupportSite = new THashSet<LoginSite>();
-            recogCaptcha.SupportSite.Add(LoginSite.Baidu);
-            recogCaptcha.SupportSite.Add(LoginSite.Weibo);
+            recogCaptcha.SupportSite = new THashSet<string>();
+			recogCaptcha.SupportSite.Add(LoginSite.Baidu.ToString());
+			recogCaptcha.SupportSite.Add(LoginSite.Weibo.ToString());
             pluginConfig.Extensions.Add(recogCaptcha);
 
             //Code Platform for WeiboWap login.
@@ -41,8 +41,8 @@ namespace PluginConfigBuild
             codePlatform.ExtendType = PluginType.Thrift;
             codePlatform.Host = "127.0.0.1";
             codePlatform.Port = 7801;
-            codePlatform.SupportSite = new THashSet<LoginSite>();
-            codePlatform.SupportSite.Add(LoginSite.WeiboWap);
+            codePlatform.SupportSite = new THashSet<string>();
+			codePlatform.SupportSite.Add(LoginSite.WeiboWap.ToString());
             pluginConfig.Extensions.Add(codePlatform);
 
             Console.WriteLine("Write the plugin config to file.");

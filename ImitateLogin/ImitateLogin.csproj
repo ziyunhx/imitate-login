@@ -73,6 +73,7 @@
     <Compile Include="Core\OperationObj.cs" />
     <Compile Include="Core\ThriftOperation.cs" />
     <Compile Include="Login\QQLogin.cs" />
+    <Compile Include="Login\TaobaoLogin.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

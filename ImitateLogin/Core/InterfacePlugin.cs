@@ -11,7 +11,7 @@ namespace ImitateLogin
 
 	public interface ILoginSiteData
 	{
-		LoginSite loginSite { get; }
+		string loginSite { get; }
 	}
 	#endregion
 }

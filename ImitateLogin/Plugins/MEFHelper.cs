@@ -60,13 +60,13 @@ namespace ImitateLogin
 		/// <param name="loginSite">Login site.</param>
 		/// <param name="imageUrl">Image URL.</param>
 		/// <param name="image">Image.</param>
-		public string Operation(LoginSite loginSite, string imageUrl = "", Image image = null)
+		public string Operation(string loginSite, string imageUrl = "", Image image = null)
 		{
 			try
 			{
 				foreach (Lazy<IMEFOperation, ILoginSiteData> i in operations)
 				{
-					if (i.Metadata.loginSite == loginSite)
+					if (i.Metadata.loginSite.ToLower() == loginSite.ToLower())
 						return i.Value.Operate(imageUrl, image);
 				}
 				ILog logger = LogManager.GetLogger(typeof(MEFHelper));

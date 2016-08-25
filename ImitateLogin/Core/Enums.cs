@@ -14,6 +14,8 @@ namespace ImitateLogin
 		Weibo = 1,
 		[Description("Weibo Wap")]
 		WeiboWap = 2,
+		[Description("*Taobao")]
+		Taobao = 3,
 		[Description("*Tencent QQ")]
 		QQ = 4,
 		[Description("Baidu")]

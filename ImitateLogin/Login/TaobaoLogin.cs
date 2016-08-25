@@ -6,8 +6,8 @@ using Thrinax.Helper;
 namespace ImitateLogin
 {
     [Export(typeof(ILogin))]
-	[ExportMetadata("loginSite", "QQ")]
-    public class QQLogin : ILogin
+	[ExportMetadata("loginSite", "Taobao")]
+    public class TaobaoLogin : ILogin
     {
         #region ILogin implementation
 

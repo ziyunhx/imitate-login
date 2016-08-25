@@ -9,7 +9,7 @@ using Thrinax.Helper;
 namespace ImitateLogin
 {
     [Export(typeof(ILogin))]
-    [ExportMetadata("loginSite", LoginSite.Weibo)]
+    [ExportMetadata("loginSite", "Weibo")]
     /// <summary>
     /// Weibo Login
     /// </summary>
