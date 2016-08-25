@@ -30,10 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -53,6 +49,9 @@
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Login\BaiduLogin.cs" />
@@ -68,12 +67,12 @@
     <Compile Include="Core\Enums.cs" />
     <Compile Include="LoginHelper.cs" />
     <Compile Include="Core\LoginResult.cs" />
-    <Compile Include="Login\TaobaoLogin.cs" />
     <Compile Include="Core\InterfacePlugin.cs" />
     <Compile Include="Core\Config.cs" />
     <Compile Include="Core\Extension.cs" />
     <Compile Include="Core\OperationObj.cs" />
     <Compile Include="Core\ThriftOperation.cs" />
+    <Compile Include="Login\QQLogin.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

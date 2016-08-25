@@ -14,8 +14,6 @@ namespace ImitateLogin
 		Weibo = 1,
 		[Description("Weibo Wap")]
 		WeiboWap = 2,
-		[Description("*Taobao")]
-		Taobao = 3,
 		[Description("*Tencent QQ")]
 		QQ = 4,
 		[Description("Baidu")]
@@ -28,6 +26,8 @@ namespace ImitateLogin
 		Twitter = 22,
 		[Description("*Google")]
 		Google = 23,
+		[Description("*Universal")]
+		Universal = 99,
 	}
 
 	/// <summary>
