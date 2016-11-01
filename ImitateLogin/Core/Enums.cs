@@ -18,14 +18,18 @@ namespace ImitateLogin
 		Taobao = 3,
 		[Description("*Tencent QQ")]
 		QQ = 4,
-		[Description("*Baidu")]
+		[Description("Baidu")]
 		Baidu = 5,
+        [Description("WeChat")]
+        WeChat = 6,
 		[Description("*Facebook")]
 		Facebook = 21,
 		[Description("*Twitter")]
 		Twitter = 22,
 		[Description("*Google")]
 		Google = 23,
+		[Description("*Universal")]
+		Universal = 99,
 	}
 
 	/// <summary>
@@ -44,7 +48,17 @@ namespace ImitateLogin
 		ServiceError = 500,
 	}
 
-	public class Enums
+    /// <summary>
+    /// Plugin type
+    /// </summary>
+    public enum PluginType
+    {
+        MEF = 1,
+        REST = 2,
+        Thrift = 3,
+    }
+
+    public class Enums
 	{
 		/// <summary>
 		/// Gets the description.

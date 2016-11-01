@@ -49,10 +49,12 @@
     </Reference>
     <Reference Include="Mono.Posix" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Thrift">
-      <HintPath>..\packages\ApacheThrift.0.9.2\lib\Thrift.dll</HintPath>
+      <HintPath>..\..\packages\ApacheThrift.0.9.3\lib\Thrift.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -68,14 +70,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\ImitateLogin\ImitateLogin.csproj">
-      <Project>{D6B4E38E-1D46-4996-8527-302A1ADDB288}</Project>
-      <Name>ImitateLogin</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ImitateLogin\ImitateLogin.csproj">
+      <Project>{D6B4E38E-1D46-4996-8527-302A1ADDB288}</Project>
+      <Name>ImitateLogin</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
