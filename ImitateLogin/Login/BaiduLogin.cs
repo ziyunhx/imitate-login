@@ -39,7 +39,7 @@ namespace ImitateLogin
 
         public CookieContainer cookies { get; set; }
 
-        public LoginResult DoLogin(string UserName, string Password)
+        public LoginResult DoLogin(string UserName, string Password, string UserAgent = "")
         {
             cookies = new CookieContainer();
 

@@ -18,24 +18,24 @@ namespace ImitateLogin
 		/// <param name="UserName">用户名</param>
 		/// <param name="Password">密码</param>
 		/// <returns>Login result</returns>
-		public LoginResult DoLogin(string UserName, string Password)
+		public LoginResult DoLogin(string UserName, string Password, string UserAgent = "")
 		{
 			cookies = new CookieContainer();
 			try
 			{
-				if (GetPreloginStatus(UserName))
+				if (GetPreloginStatus(UserName, UserAgent))
 				{
 					string login_url = "https://login.sina.com.cn/sso/login.php?client=ssologin.js(v1.4.15)&_=" + TimeHelper.ConvertDateTimeInt(DateTime.Now).ToString();
 					string login_data = "entry=account&gateway=1&from=&savestate=30&useticket=0&pagerefer=&vsnf=1&su=" + get_user(UserName)
 						+ "&service=sso&servertime=" + servertime + "&nonce=" + nonce + "&pwencode=rsa2&rsakv=" + rsakv + "&sp=" + get_pwa_rsa(Password)
 						+ "&sr=1440*900&encoding=UTF-8&cdult=3&domain=sina.com.cn&prelt=" + prelt + "&returntype=TEXT";
 
-					string Content = HttpHelper.GetHttpContent(login_url, login_data, cookies);
+					string Content = HttpHelper.GetHttpContent(login_url, login_data, cookies, UserAgent);
                     dynamic refreshJson = JsonConvert.DeserializeObject(Content.Substring(0, Content.LastIndexOf('}') + 1));
-                    HttpHelper.GetHttpContent(refreshJson.crossDomainUrlList[0].ToString(), cookies: cookies, referer: login_url);
+                    HttpHelper.GetHttpContent(refreshJson.crossDomainUrlList[0].ToString(), cookies: cookies, userAgent:UserAgent, referer: login_url);
 
 					string home_url = "http://weibo.com/tnidea/";
-					string result = HttpHelper.GetHttpContent(home_url, cookies: cookies);
+					string result = HttpHelper.GetHttpContent(home_url, cookies: cookies, userAgent:UserAgent);
 
                     if (string.IsNullOrWhiteSpace(result) || result.Contains("账号存在异常") || !result.Contains("$CONFIG['islogin']='1'"))
 					{
@@ -60,13 +60,13 @@ namespace ImitateLogin
 		/// </summary>
 		/// <param name="UserName">用户名</param>
 		/// <returns>是否成功获取</returns>
-		private bool GetPreloginStatus(string UserName)
+		private bool GetPreloginStatus(string UserName, string UserAgent = "")
 		{
 			try
 			{
 				long timestart = TimeHelper.ConvertDateTimeInt(DateTime.Now);
 				string prelogin_url = "http://login.sina.com.cn/sso/prelogin.php?entry=account&callback=sinaSSOController.preloginCallBack&su=" + get_user(UserName) + "&rsakt=mod&client=ssologin.js(v1.4.15)&_=" + timestart;
-				string Content = HttpHelper.GetHttpContent(prelogin_url, cookies: cookies, encode: Encoding.GetEncoding("GB2312"));
+                string Content = HttpHelper.GetHttpContent(prelogin_url, cookies: cookies, userAgent: UserAgent, encode: Encoding.GetEncoding("GB2312"));
 				long dateTimeEndPre = TimeHelper.ConvertDateTimeInt(DateTime.Now);
 
 				prelt = Math.Max(dateTimeEndPre - timestart, 50).ToString();

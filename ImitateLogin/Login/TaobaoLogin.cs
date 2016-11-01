@@ -6,7 +6,7 @@ namespace ImitateLogin
     {
         #region ILogin implementation
 
-        public LoginResult DoLogin(string UserName, string Password)
+        public LoginResult DoLogin(string UserName, string Password, string UserAgent = "")
         {
             //login url
             string loginUrl = "https://login.taobao.com/member/login.jhtml";

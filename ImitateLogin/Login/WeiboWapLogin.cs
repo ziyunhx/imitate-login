@@ -24,13 +24,13 @@ namespace ImitateLogin
 		/// <returns>The login.</returns>
 		/// <param name="UserName">User name.</param>
 		/// <param name="Password">Password.</param>
-		public LoginResult DoLogin(string UserName, string Password)
+		public LoginResult DoLogin(string UserName, string Password, string UserAgent = "")
 		{
 			cookies = new CookieContainer();
 
 			try
 			{
-				string preContent = HttpHelper.GetHttpContent("https://login.weibo.cn/login/", cookies: cookies);
+                string preContent = HttpHelper.GetHttpContent("https://login.weibo.cn/login/", cookies: cookies, userAgent: UserAgent);
 
 				if(!string.IsNullOrWhiteSpace(preContent))
 				{
@@ -47,7 +47,7 @@ namespace ImitateLogin
 						string postData = string.Format(postFmt, HttpUtility.UrlEncode(UserName, Encoding.UTF8), pwName, Password
 							, HttpUtility.UrlEncode(backURL, Encoding.UTF8), HttpUtility.UrlEncode(backTitle, Encoding.UTF8), vkValue);
 
-						string LoginContent = HttpHelper.GetHttpContent(url, postData, cookies, referer: "https://login.weibo.cn/login/");
+						string LoginContent = HttpHelper.GetHttpContent(url, postData, cookies, UserAgent, referer: "https://login.weibo.cn/login/");
 
 						//验证是否登录成功
 						if (!LoginContent.Contains("我的首页") || LoginContent.Contains("你的账号存在异常"))

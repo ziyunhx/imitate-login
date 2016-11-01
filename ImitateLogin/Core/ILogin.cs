@@ -1,12 +1,11 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 
 namespace ImitateLogin
 {
-	public interface ILogin
+    public interface ILogin
 	{
 		CookieContainer cookies {set; get;}
-		LoginResult DoLogin(string UserName, string Password);
+		LoginResult DoLogin(string UserName, string Password, string UserAgent = "");
 	}
 }
 
