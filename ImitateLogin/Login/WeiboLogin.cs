@@ -24,7 +24,7 @@ namespace ImitateLogin
 		/// <param name="UserName">user name</param>
 		/// <param name="Password">password</param>
 		/// <returns>Login result</returns>
-		public LoginResult DoLogin(string UserName, string Password)
+		public LoginResult DoLogin(string UserName, string Password, string UserAgent = "")
 		{
 			cookies = new CookieContainer();
 			try

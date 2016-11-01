@@ -11,7 +11,7 @@ namespace ImitateLogin
     {
         #region ILogin implementation
 
-        public LoginResult DoLogin(string UserName, string Password)
+        public LoginResult DoLogin(string UserName, string Password, string UserAgent = "")
         {
 			cookies = new CookieContainer ();
 			//login url
@@ -33,7 +33,7 @@ namespace ImitateLogin
             throw new NotImplementedException();
         }
 
-		public CookieContainer cookies { set; get;}
+        public CookieContainer cookies { set; get;}
 
         #endregion
     }

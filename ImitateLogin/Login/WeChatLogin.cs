@@ -39,7 +39,7 @@ namespace ImitateLogin
         /// <param name="UserName"></param>
         /// <param name="Password"></param>
         /// <returns></returns>
-        public LoginResult DoLogin(string UserName, string Password)
+        public LoginResult DoLogin(string UserName, string Password, string UserAgent = "")
         {
             LoginResult loginResult = new LoginResult();
 

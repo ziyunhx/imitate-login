@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LoginTestTool.WPF"
         mc:Ignorable="d"
-        Title="Imitate Login Tool" Height="338.835" Width="342.962" Icon="favicon.ico">
+        Title="Imitate Login Tool" Height="338.835" Width="342.962">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
