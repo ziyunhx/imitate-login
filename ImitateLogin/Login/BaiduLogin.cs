@@ -5,7 +5,9 @@ using System.Diagnostics;
 using System.Net;
 using System.Text;
 using System.Web;
-using Thrinax.Helper;
+using Thrinax.Decrypt;
+using Thrinax.Http;
+using Thrinax.Utility;
 
 /* err code
 "-1":       "系统错误,请您稍后再试",
@@ -54,7 +56,7 @@ namespace ImitateLogin
                 HttpHelper.GetHttpContent("https://passport.baidu.com/passApi/html/_blank.html", cookies: cookies, cookiesDomain: "passport.baidu.com");
 
                 //1. Get the token.
-                string token_url = string.Format("https://passport.baidu.com/v2/api/?getapi&tpl=mn&apiver=v3&tt={0}&class=login&gid={1}&logintype=dialogLogin&callback=bd__cbs__{2}", TimeHelper.ConvertDateTimeInt(DateTime.Now), Guid.NewGuid().ToString().ToUpper(), build_callback());
+                string token_url = string.Format("https://passport.baidu.com/v2/api/?getapi&tpl=mn&apiver=v3&tt={0}&class=login&gid={1}&logintype=dialogLogin&callback=bd__cbs__{2}", TimeUtility.ConvertDateTimeInt(DateTime.Now), Guid.NewGuid().ToString().ToUpper(), build_callback());
                 string prepareContent = HttpHelper.GetHttpContent(token_url, null, cookies, referer: "https://www.baidu.com/", encode: Encoding.GetEncoding("GB2312"), cookiesDomain: "passport.baidu.com");
                 //string prepareJson = prepareContent.Split('(')[1].Split(')')[0];
                 dynamic prepareJson = JsonConvert.DeserializeObject(prepareContent.Split('(')[1].Split(')')[0]);
@@ -62,7 +64,7 @@ namespace ImitateLogin
 
                 //2. Get public key
                 string pubkey_url = "https://passport.baidu.com/v2/getpublickey?token={0}&tpl=mn&apiver=v3&tt={1}&gid={2}&callback=bd__cbs__{3}";
-                string pubkeyContent = HttpHelper.GetHttpContent(string.Format(pubkey_url, token, TimeHelper.ConvertDateTimeInt(DateTime.Now), Guid.NewGuid().ToString().ToUpper(), build_callback()), null, cookies, referer: "https://www.baidu.com/", encode: Encoding.GetEncoding("GB2312"), cookiesDomain: "passport.baidu.com");
+                string pubkeyContent = HttpHelper.GetHttpContent(string.Format(pubkey_url, token, TimeUtility.ConvertDateTimeInt(DateTime.Now), Guid.NewGuid().ToString().ToUpper(), build_callback()), null, cookies, referer: "https://www.baidu.com/", encode: Encoding.GetEncoding("GB2312"), cookiesDomain: "passport.baidu.com");
 
                 dynamic pubkeyJson = JsonConvert.DeserializeObject(pubkeyContent.Split('(')[1].Split(')')[0]);
                 rsa_pub_baidu = pubkeyJson.pubkey;
@@ -72,7 +74,7 @@ namespace ImitateLogin
                 //3. Build post data
                 string login_data = "staticpage=https%3A%2F%2Fwww.baidu.com%2Fcache%2Fuser%2Fhtml%2Fv3Jump.html&charset=UTF-8&token={0}&tpl=mn&subpro=&apiver=v3&tt={1}&codestring=&safeflg=0&u=https%3A%2F%2Fwww.baidu.com%2F&isPhone=&detect=1&gid={2}&quick_user=0&logintype=dialogLogin&logLoginType=pc_loginDialog&idc=&loginmerge=true&splogin=rate&username={3}&password={4}&verifycode=&mem_pass=on&rsakey={5}&crypttype=12&ppui_logintime={6}&countrycode=&callback=parent.bd__pcbs__{7}";
 
-                login_data = string.Format(login_data, token, TimeHelper.ConvertDateTimeInt(DateTime.Now), Guid.NewGuid().ToString().ToUpper(), HttpUtility.UrlEncode(UserName), HttpUtility.UrlEncode(get_pwa_rsa(Password)), HttpUtility.UrlEncode(KEY), stopwatch.ElapsedMilliseconds, build_callback());
+                login_data = string.Format(login_data, token, TimeUtility.ConvertDateTimeInt(DateTime.Now), Guid.NewGuid().ToString().ToUpper(), HttpUtility.UrlEncode(UserName), HttpUtility.UrlEncode(get_pwa_rsa(Password)), HttpUtility.UrlEncode(KEY), stopwatch.ElapsedMilliseconds, build_callback());
 
                 //4. Post the login data
                 string login_url = "https://passport.baidu.com/v2/api/?login";

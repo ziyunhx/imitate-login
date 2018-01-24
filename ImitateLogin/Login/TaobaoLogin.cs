@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Net;
-using Thrinax.Helper;
+using Thrinax.Http;
 
 namespace ImitateLogin
 {

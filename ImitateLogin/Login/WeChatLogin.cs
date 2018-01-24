@@ -6,7 +6,8 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
-using Thrinax.Helper;
+using Thrinax.Http;
+using Thrinax.Utility;
 
 namespace ImitateLogin
 {
@@ -46,7 +47,7 @@ namespace ImitateLogin
             HttpHelper.GetHttpContent("https://wx.qq.com/?&lang=zh_CN", cookies: cookies);
 
             //request the image, and send this image url to email.
-            string QRLogin = HttpHelper.GetHttpContent("https://login.weixin.qq.com/jslogin?appid=wx782c26e4c19acffb&redirect_uri=https%3A%2F%2Fwx.qq.com%2Fcgi-bin%2Fmmwebwx-bin%2Fwebwxnewloginpage&fun=new&lang=zh_CN&_=" + TimeHelper.ConvertDateTimeInt(DateTime.Now), cookies: cookies);
+            string QRLogin = HttpHelper.GetHttpContent("https://login.weixin.qq.com/jslogin?appid=wx782c26e4c19acffb&redirect_uri=https%3A%2F%2Fwx.qq.com%2Fcgi-bin%2Fmmwebwx-bin%2Fwebwxnewloginpage&fun=new&lang=zh_CN&_=" + TimeUtility.ConvertDateTimeInt(DateTime.Now), cookies: cookies);
 
             string QRUid = "";
             string qrUrl = "";
@@ -67,7 +68,7 @@ namespace ImitateLogin
                 int i = 0;
                 do
                 {
-                    string result = HttpHelper.GetHttpContent(string.Format(strFmt, QRUid, "-595416181", TimeHelper.ConvertDateTimeInt(DateTime.Now)), cookies: cookies);
+                    string result = HttpHelper.GetHttpContent(string.Format(strFmt, QRUid, "-595416181", TimeUtility.ConvertDateTimeInt(DateTime.Now)), cookies: cookies);
 
                     i++;
 
@@ -87,7 +88,7 @@ namespace ImitateLogin
                                 pass_ticket = m3.Groups["pass_ticket"].Value;
 
                                 //wxInit, Get the synckey.
-                                string wxInitUrl = string.Format("https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxinit?r={0}&lang=zh_CN&pass_ticket={1}", TimeHelper.ConvertDateTimeInt(DateTime.Now) / 1000, pass_ticket);
+                                string wxInitUrl = string.Format("https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxinit?r={0}&lang=zh_CN&pass_ticket={1}", TimeUtility.ConvertDateTimeInt(DateTime.Now) / 1000, pass_ticket);
                                 string wxInitPost = "{\"BaseRequest\":{\"Uin\":\"" + wxuin + "\",\"Sid\":\"" + wxsid + "\",\"Skey\":\"" + skey + "\",\"DeviceID\":\"" + BuildDeviceId() + "\"}}";
                                 do
                                 {
@@ -180,7 +181,7 @@ namespace ImitateLogin
         /// <param name="e"></param>
         private void SyncCheck(object sender, System.Timers.ElapsedEventArgs e)
         {
-            long timeNow = TimeHelper.ConvertDateTimeInt(DateTime.Now);
+            long timeNow = TimeUtility.ConvertDateTimeInt(DateTime.Now);
             string result = HttpHelper.GetHttpContent(string.Format(SyncCheckUrl, timeNow + 89075, skey, wxsid, wxuin, BuildDeviceId(), synckey, timeNow), cookies:cookies, referer: WxUrl);
 
             //needn't do it!

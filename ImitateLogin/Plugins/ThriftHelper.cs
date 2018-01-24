@@ -1,15 +1,14 @@
-﻿using System;
-using Thrift.Transport;
-using Thrift.Protocol;
-using Thrinax.Helper;
-using log4net;
+﻿using log4net;
+using System;
 using System.Drawing;
+using Thrift.Protocol;
+using Thrift.Transport;
 
 namespace ImitateLogin
 {
-	/// <summary>
-	/// Thrift helper.
-	/// </summary>
+    /// <summary>
+    /// Thrift helper.
+    /// </summary>
     public class ThriftHelper
     {
 		private string _host = "";
@@ -45,7 +44,7 @@ namespace ImitateLogin
 					{
 						LoginSite = loginSite,
 						ImageUrl = imageUrl,
-						Image = ImageHelper.GetBytesByImage(image)
+						//Image = ImageHelper.GetBytesByImage(image)
 					};
 
 				result = client.Operation(operationObj);

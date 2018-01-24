@@ -4,7 +4,9 @@ using System.ComponentModel.Composition;
 using System.Net;
 using System.Text;
 using System.Web;
-using Thrinax.Helper;
+using Thrinax.Decrypt;
+using Thrinax.Http;
+using Thrinax.Utility;
 
 namespace ImitateLogin
 {
@@ -31,7 +33,7 @@ namespace ImitateLogin
 			{
 				if (GetPreloginStatus(UserName))
 				{
-					string login_url = "https://login.sina.com.cn/sso/login.php?client=ssologin.js(v1.4.15)&_=" + TimeHelper.ConvertDateTimeInt(DateTime.Now).ToString();
+					string login_url = "https://login.sina.com.cn/sso/login.php?client=ssologin.js(v1.4.15)&_=" + TimeUtility.ConvertDateTimeInt(DateTime.Now).ToString();
 					string login_data = "entry=account&gateway=1&from=&savestate=30&useticket=0&pagerefer=&vsnf=1&su=" + get_user(UserName)
 						+ "&service=sso&servertime=" + servertime + "&nonce=" + nonce + "&pwencode=rsa2&rsakv=" + rsakv + "&sp=" + get_pwa_rsa(Password)
 						+ "&sr=1440*900&encoding=UTF-8&cdult=3&domain=sina.com.cn&prelt=" + prelt + "&returntype=TEXT";
@@ -70,10 +72,10 @@ namespace ImitateLogin
 		{
 			try
 			{
-				long timestart = TimeHelper.ConvertDateTimeInt(DateTime.Now);
+				long timestart = TimeUtility.ConvertDateTimeInt(DateTime.Now);
 				string prelogin_url = "http://login.sina.com.cn/sso/prelogin.php?entry=account&callback=sinaSSOController.preloginCallBack&su=" + get_user(UserName) + "&rsakt=mod&client=ssologin.js(v1.4.15)&_=" + timestart;
 				string Content = HttpHelper.GetHttpContent(prelogin_url, cookies: cookies, encode: Encoding.GetEncoding("GB2312"));
-				long dateTimeEndPre = TimeHelper.ConvertDateTimeInt(DateTime.Now);
+				long dateTimeEndPre = TimeUtility.ConvertDateTimeInt(DateTime.Now);
 
 				prelt = Math.Max(dateTimeEndPre - timestart, 50).ToString();
                 dynamic prepareJson = JsonConvert.DeserializeObject(Content.Split('(')[1].Split(')')[0]);

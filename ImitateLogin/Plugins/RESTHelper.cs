@@ -1,16 +1,16 @@
-﻿using System;
-using Thrinax.Helper;
+﻿using log4net;
 using Newtonsoft.Json;
-using log4net;
+using System;
 using System.Drawing;
 using System.Web;
+using Thrinax.Http;
 
 namespace ImitateLogin
 {
-	/// <summary>
-	/// REST helper. Because of the image, only support POST method.
-	/// If you choose GET, only the imageUrl can you get.
-	/// </summary>
+    /// <summary>
+    /// REST helper. Because of the image, only support POST method.
+    /// If you choose GET, only the imageUrl can you get.
+    /// </summary>
     public class RESTHelper
     {
 		private string _urlFormat = "";
@@ -45,7 +45,7 @@ namespace ImitateLogin
 				{
 					string postData = JsonConvert.SerializeObject(
 						new OperationObj(){
-							LoginSite=loginSite, ImageUrl = imageUrl, Image = ImageHelper.GetBytesByImage(image)
+							LoginSite=loginSite, ImageUrl = imageUrl//, Image = ImageHelper.GetBytesByImage(image)
 						});
 					return HttpHelper.GetHttpContent(_urlFormat,postData);
 				}
